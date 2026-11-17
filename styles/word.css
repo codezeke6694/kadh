@@ -1,0 +1,94 @@
+/* The word page: the Kinnauri you are learning sits on a deodar slab; the other two beside it. */
+
+.word-page {
+  max-width: 46rem;
+  margin: 0 auto;
+  display: grid;
+  gap: var(--space-5);
+}
+
+.word-head { padding-top: var(--space-2); }
+
+.word-en {
+  margin: 0;
+  font-size: clamp(var(--text-2xl), 8vw, 3.4rem);
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.word-hi {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-xl);
+  color: var(--ink-soft);
+}
+
+.word-dialects {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.word-dialect {
+  padding: var(--space-4) var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+
+.word-dialect p { margin: 0; }
+
+.word-dialect-name {
+  font: 700 var(--text-sm) var(--font-body);
+  color: var(--ink-soft);
+}
+
+.word-dialect-text.kinnauri {
+  font-size: var(--text-xl);
+  overflow-wrap: anywhere;
+}
+
+.word-empty { font-style: italic; padding: var(--space-1) 0; }
+
+.word-dialect.chosen {
+  background: var(--deodar);
+  border-color: var(--deodar-deep);
+  color: var(--on-deodar);
+  padding: var(--space-5);
+  box-shadow: var(--shadow);
+}
+
+.word-dialect.chosen .word-dialect-name,
+.word-dialect.chosen .word-yours,
+.word-dialect.chosen .muted { color: var(--on-deodar); opacity: 0.85; }
+
+.word-dialect.chosen .word-dialect-text.kinnauri {
+  color: var(--on-deodar);
+  font-size: var(--text-kinnauri);
+}
+
+.word-yours { font-size: var(--text-sm); }
+
+.word-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px dashed var(--line);
+}
+
+.word-topic { margin: 0; font-size: var(--text-base); }
+.word-topic-name { font-weight: 700; }
+
+/* On a tablet or laptop the other two sit side by side under the one you are learning. */
+@media (min-width: 40rem) {
+  .word-dialects { grid-template-columns: 1fr 1fr; }
+  .word-dialect.chosen { grid-column: 1 / -1; }
+}
+
+@media (max-width: 30rem) {
+  .word-practise { width: 100%; }
+}
