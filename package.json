@@ -1,0 +1,11 @@
+{
+  "name": "kadh",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Learn Kinnauri with games",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/",
+    "snapshot": "node scripts/snapshot.mjs"
+  }
+}
