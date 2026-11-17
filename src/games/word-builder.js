@@ -178,18 +178,20 @@ function draw(play) {
   const answer = make(doc, "div", `wb-answer${play.done && play.correct ? " wb-right" : ""}${play.done && !play.correct ? " wb-shown" : ""}`);
   answer.setAttribute("aria-label", t("wordBuilder.yourWord"));
   answer.setAttribute("lang", "hi");
-  answer.append(...play.placed.map((syllable, index) => makeTile(play, syllable, () => sendBack(play, index))));
+  answer.append(...play.placed.map((syllable, index) => makeTile(play, syllable, "wordBuilder.takeBack", () => sendBack(play, index))));
   const pool = make(doc, "div", "wb-pool");
   pool.setAttribute("aria-label", t("wordBuilder.pieces"));
   pool.setAttribute("lang", "hi");
-  pool.append(...play.pool.map((syllable, index) => makeTile(play, syllable, () => place(play, index))));
+  pool.append(...play.pool.map((syllable, index) => makeTile(play, syllable, "wordBuilder.place", () => place(play, index))));
   box.append(progress, make(doc, "p", "wb-ask muted", t("wordBuilder.ask")), meaning, answer, pool);
   box.append(makeFeedback(doc, play), makeActions(doc, play));
   el.replaceChildren(box);
 }
 
-function makeTile(play, syllable, onClick) {
+// A tile is named by what tapping it does ("Place बो"), for screen readers and the browser walk.
+function makeTile(play, syllable, actionKey, onClick) {
   const tile = makeButton(play.el.ownerDocument, "wb-tile", syllable, onClick);
+  tile.setAttribute("aria-label", `${play.context.t(actionKey)} ${syllable}`);
   if (play.done) tile.setAttribute("disabled", "");
   return tile;
 }

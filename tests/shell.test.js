@@ -2,7 +2,7 @@ import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { parseRoute, routeFor, mountShell, renderNotFound, ROUTE } from "../src/app.js";
-import { t, setLang, getLang, loadStrings } from "../src/i18n.js";
+import { t, setLang, getLang, loadStrings, importIfThere, isMissingModule } from "../src/i18n.js";
 import { getSettings, setSettings } from "../src/data/progress.js";
 
 // A small stand-in for the browser's document: only what the shell uses.
@@ -138,6 +138,24 @@ test("an unknown language is refused", () => {
 test("a part whose strings file is not there yet is harmless", async () => {
   await assert.doesNotReject(loadStrings(["shell", "not-built-yet"]));
   assert.equal(t("shell.words"), "Words");
+});
+
+test("a screen file not there yet loads as null", async () => {
+  assert.equal(await importIfThere(new URL("../src/screens/not-built-yet.js", import.meta.url).href), null);
+});
+
+test("a screen file that is there but broken still fails, so the error card shows", async () => {
+  await assert.rejects(importIfThere("data:text/javascript,null.render();"), TypeError);
+  await assert.rejects(importIfThere('data:text/javascript,import "file:///no-such-folder/helper.js";'), {
+    code: "ERR_MODULE_NOT_FOUND",
+  });
+});
+
+test("only a browser's failed fetch of the module's own address counts as not built", () => {
+  const url = "https://kadh.example/src/screens/words.js";
+  assert.equal(isMissingModule(new TypeError(`Failed to fetch dynamically imported module: ${url}`), url), true);
+  assert.equal(isMissingModule(new TypeError("Cannot read properties of null (reading 'render')"), url), false);
+  assert.equal(isMissingModule(new TypeError(`Failed to fetch dynamically imported module: ${url}x`), url), false);
 });
 
 test("the header shows the app name and the bottom bar its four tabs", () => {

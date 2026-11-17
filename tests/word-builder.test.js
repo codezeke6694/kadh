@@ -149,6 +149,17 @@ test("tapping a syllable places it; tapping a placed syllable sends it back", ()
   assert.equal(pool(el).length, 2);
 });
 
+test("each piece is named by what tapping it does, so it can be found by name", () => {
+  const { el } = play([WORDS[1]]);
+  const [first] = pool(el);
+  assert.equal(first.getAttribute("aria-label"), `Place ${first.textContent}`);
+  first.click();
+  assert.equal(placed(el)[0].getAttribute("aria-label"), `Take back ${placed(el)[0].textContent}`);
+  setLang("hi");
+  placed(el)[0].click();
+  assert.equal(pool(el)[0].getAttribute("aria-label"), `रखें ${pool(el)[0].textContent}`);
+});
+
 test("the syllables in the right order are marked correct and counted right", () => {
   const { el, answers } = play([WORDS[1]]);
   build(el, ["मु", "न्न"]);
@@ -201,6 +212,6 @@ test("Backspace sends the last placed syllable back; the listener goes on unmoun
 
 test("a topic without a word of two syllables says so instead of playing", () => {
   const { el, finished } = play([WORDS[4]]);
-  assert.match(el.textContent, /no words long enough/i);
+  assert.equal(el.textContent, "None of these words is long enough to build. Choose other words above.");
   assert.deepEqual(finished, []);
 });

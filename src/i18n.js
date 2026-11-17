@@ -45,12 +45,15 @@ export async function importIfThere(url) {
   try {
     return await import(url);
   } catch (error) {
-    if (isMissingModule(error)) return null;
+    if (isMissingModule(error, url)) return null;
     throw error;
   }
 }
 
-// Node says ERR_MODULE_NOT_FOUND; browsers only say the fetch of the module failed (a TypeError).
-function isMissingModule(error) {
-  return error?.code === "ERR_MODULE_NOT_FOUND" || error instanceof TypeError;
+// Only the module's own file missing counts: a module that is there but throws a TypeError, or
+// that imports a missing file, is broken. Node names the missing file in error.url; browsers say
+// the fetch of the module failed (a TypeError) with its address in the message.
+export function isMissingModule(error, url) {
+  if (error?.code === "ERR_MODULE_NOT_FOUND") return error.url === url;
+  return error instanceof TypeError && error.message.endsWith(url);
 }

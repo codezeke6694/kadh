@@ -109,6 +109,18 @@ test("Still learning brings the word back later in the same deck", () => {
   assert.deepEqual(answers.map(([, correct]) => correct), [false, true]);
 });
 
+test("the cheer for a card shows under the next one only until that one is flipped", () => {
+  const { el } = mountGame();
+  const status = () => findByClass(el, "fc-status")[0];
+  answer(el, true);
+  assert.equal(status().textContent, t("flashcards.cheer"));
+  card(el).click();
+  assert.equal(status().textContent, "");
+  assert.equal(status().className, "fc-status ");
+  findButton(el, t("flashcards.learning")).click();
+  assert.equal(status().textContent, t("flashcards.again"));
+});
+
 test("the deck finishes with how many were known out of the deck", () => {
   const { el, finishes, answers } = mountGame({ words: [word("a"), word("b"), word("c")] });
   answer(el, true);

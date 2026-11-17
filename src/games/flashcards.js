@@ -115,6 +115,8 @@ export default {
     function flip() {
       if (stopped) return;
       flipped = !flipped;
+      // The cheer or nudge was for the card before; it goes once this card is turned.
+      status = { text: "", kind: "" };
       draw();
     }
 

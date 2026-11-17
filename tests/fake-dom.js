@@ -39,13 +39,18 @@ export class FakeElement {
   addEventListener(type, fn) {
     (this.listeners[type] ||= []).push(fn);
   }
+  removeEventListener(type, fn) {
+    this.listeners[type] = (this.listeners[type] || []).filter((listener) => listener !== fn);
+  }
   click() {
     for (const fn of this.listeners.click || []) fn({ preventDefault() {} });
   }
 }
 
 export function makeFakeDocument() {
-  const doc = { createElement: (tagName) => new FakeElement(tagName, doc) };
+  const doc = { createElement: (tagName) => new FakeElement(tagName, doc), listeners: {} };
+  doc.addEventListener = FakeElement.prototype.addEventListener.bind(doc);
+  doc.removeEventListener = FakeElement.prototype.removeEventListener.bind(doc);
   doc.head = new FakeElement("head", doc);
   doc.body = new FakeElement("body", doc);
   return doc;
