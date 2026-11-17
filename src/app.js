@@ -18,13 +18,14 @@ export const ROUTE = Object.freeze({
 const HOME_HASH = "#/";
 const WELCOME_HASH = "#/welcome";
 
-// The first part of the path; `param` names its one value, `bare` is where it goes without one.
+// The first part of the path; `param` names its value, `optional` a second value it may have,
+// `bare` is where it goes without a value.
 const PATHS = {
   "": { name: ROUTE.home },
   welcome: { name: ROUTE.welcome },
   words: { name: ROUTE.words },
   word: { name: ROUTE.word, param: "id" },
-  play: { name: ROUTE.play, param: "gameId", bare: ROUTE.home },
+  play: { name: ROUTE.play, param: "gameId", optional: "topic", bare: ROUTE.home },
   progress: { name: ROUTE.progress },
   settings: { name: ROUTE.settings },
   about: { name: ROUTE.about },
@@ -64,13 +65,14 @@ function decodeSegment(text) {
 }
 
 export function parseRoute(hash) {
-  const [head, value, ...rest] = hash.replace(/^#\/?/, "").split("/");
+  const [head, value, extra, ...rest] = hash.replace(/^#\/?/, "").split("/");
   const entry = Object.hasOwn(PATHS, head) ? PATHS[head] : null;
-  if (!entry || rest.length) return route(ROUTE.notFound);
+  if (!entry || rest.length || (extra !== undefined && !entry.optional)) return route(ROUTE.notFound);
   if (!entry.param) return value === undefined ? route(entry.name) : route(ROUTE.notFound);
   if (value === undefined) return entry.bare ? route(entry.bare) : route(ROUTE.notFound);
-  const decoded = decodeSegment(value);
-  return decoded ? route(entry.name, { [entry.param]: decoded }) : route(ROUTE.notFound);
+  const params = { [entry.param]: decodeSegment(value) };
+  if (extra !== undefined) params[entry.optional] = decodeSegment(extra);
+  return Object.values(params).every(Boolean) ? route(entry.name, params) : route(ROUTE.notFound);
 }
 
 // Until a Kinnauri is chosen every route leads to the first-visit screen.

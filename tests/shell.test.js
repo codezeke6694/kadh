@@ -82,6 +82,14 @@ test("the routes of J4 are read from the hash", () => {
   assert.deepEqual(parseRoute("#/about"), { name: ROUTE.about, params: {} });
 });
 
+test("a game route may name a topic as a second part", () => {
+  assert.deepEqual(parseRoute("#/play/flashcards/nature"), {
+    name: ROUTE.play,
+    params: { gameId: "flashcards", topic: "nature" },
+  });
+  assert.deepEqual(parseRoute("#/play/flashcards/all"), { name: ROUTE.play, params: { gameId: "flashcards", topic: "all" } });
+});
+
 test("a word id written in the address is decoded", () => {
   assert.deepEqual(parseRoute("#/word/thank-you%3F"), { name: ROUTE.word, params: { id: "thank-you?" } });
 });
@@ -91,7 +99,7 @@ test("the Play tab with no game opens home, where the games are", () => {
 });
 
 test("an unknown, malformed or too long route is not found", () => {
-  for (const hash of ["#/nowhere", "#/word", "#/word/", "#/words/extra", "#/word/%E0%A4", "#/play/a/b", "nonsense"]) {
+  for (const hash of ["#/nowhere", "#/word", "#/word/", "#/words/extra", "#/word/%E0%A4", "#/word/a/b", "#/play/a/b/c", "#/play/flashcards/", "#/play//nature", "nonsense"]) {
     assert.equal(parseRoute(hash).name, ROUTE.notFound, hash);
   }
 });
