@@ -2,8 +2,8 @@
 export default {
   en: {
     "flashcards.tapToFlip": "Tap to see the meaning",
-    "flashcards.flipLabel": "Show the meaning",
-    "flashcards.meaningLabel": "Show the Kinnauri word again",
+    "flashcards.flipLabel": "Flip the card to see the meaning",
+    "flashcards.meaningLabel": "Flip the card back to the Kinnauri word",
     "flashcards.knew": "I knew it",
     "flashcards.learning": "Still learning",
     "flashcards.left": "Cards left",
@@ -13,8 +13,8 @@ export default {
   },
   hi: {
     "flashcards.tapToFlip": "अर्थ देखने के लिए छुएँ",
-    "flashcards.flipLabel": "अर्थ दिखाएँ",
-    "flashcards.meaningLabel": "किन्नौरी शब्द फिर दिखाएँ",
+    "flashcards.flipLabel": "अर्थ देखने के लिए कार्ड पलटें",
+    "flashcards.meaningLabel": "कार्ड पलटकर किन्नौरी शब्द देखें",
     "flashcards.knew": "मुझे पता था",
     "flashcards.learning": "अभी सीख रहे हैं",
     "flashcards.left": "बचे कार्ड",
