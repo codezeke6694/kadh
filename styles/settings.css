@@ -1,0 +1,191 @@
+/* The welcome and settings screens. Colours come only from the tokens in base.css. */
+
+/* The three Kinnauri: their words for one thing, side by side, are the welcome's centrepiece. */
+.dialect-choice {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 var(--space-2);
+}
+
+.dialect-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 4.5rem;
+  padding: var(--space-3) var(--space-5);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s, background-color 0.15s, transform 0.15s;
+}
+
+.dialect-option:hover { border-color: var(--deodar); }
+.dialect-option:active { transform: scale(0.98); }
+
+.dialect-name {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.dialect-option .dialect-example {
+  color: inherit;
+  overflow-wrap: anywhere;
+}
+
+/* Chosen: the tile turns deodar and an apple drop marks it. */
+.dialect-option[aria-checked="true"] {
+  border-color: var(--deodar);
+  background: var(--deodar);
+  color: var(--on-deodar);
+}
+
+.dialect-option[aria-checked="true"]::after {
+  content: "";
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50% 50% 50% 0;
+  background: var(--apple);
+  transform: rotate(-45deg);
+}
+
+.dialect-caption {
+  font-size: var(--text-sm);
+}
+
+@media (min-width: 640px) {
+  .dialect-choice { grid-template-columns: repeat(3, 1fr); }
+
+  .dialect-option {
+    flex-direction: column-reverse;
+    justify-content: center;
+    min-height: 11rem;
+    padding: var(--space-5) var(--space-3);
+    text-align: center;
+  }
+
+  .dialect-option .dialect-example { font-size: calc(var(--text-kinnauri) * 1.25); }
+}
+
+/* Welcome */
+.welcome {
+  max-width: 46rem;
+  margin: 0 auto;
+}
+
+.welcome-title {
+  font-size: clamp(var(--text-2xl), 7vw, 3.4rem);
+  margin-top: var(--space-4);
+}
+
+.welcome-lead {
+  font-size: var(--text-lg);
+  color: var(--ink-soft);
+}
+
+.welcome-ask {
+  margin-top: var(--space-6);
+}
+
+.start-button {
+  width: 100%;
+  min-height: 3.5rem;
+  margin-top: var(--space-5);
+  font-size: var(--text-lg);
+}
+
+.start-button:disabled {
+  background: var(--line);
+  color: var(--ink-soft);
+  cursor: not-allowed;
+}
+
+.welcome-hint,
+.welcome-later {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-sm);
+  text-align: center;
+  max-width: none;
+}
+
+@media (min-width: 640px) {
+  .start-button { width: auto; min-width: 16rem; }
+  .welcome-hint,
+  .welcome-later { text-align: left; }
+}
+
+/* Settings */
+.settings {
+  display: grid;
+  gap: var(--space-5);
+  max-width: 46rem;
+  margin: 0 auto;
+}
+
+.settings > h1 { margin: var(--space-4) 0 0; }
+
+.settings-section h2 { font-size: var(--text-lg); }
+.settings-section .dialect-option { box-shadow: none; }
+
+.lang-choices {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.lang-choice {
+  min-height: 3rem;
+  min-width: 7rem;
+  padding: 0 var(--space-5);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink);
+  font: 500 var(--text-base) var(--font-body);
+  cursor: pointer;
+}
+
+.lang-choice[aria-checked="true"] {
+  border-color: var(--deodar);
+  background: var(--deodar);
+  color: var(--on-deodar);
+  font-weight: 700;
+}
+
+.reset-confirm {
+  padding: var(--space-4);
+  border: 2px solid var(--apple);
+  border-radius: var(--radius-button);
+  background: var(--apple-soft);
+}
+
+.reset-confirm[hidden],
+.reset-button[hidden],
+.welcome-hint[hidden] { display: none; }
+
+.reset-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.reset-done:empty { display: none; }
+
+.reset-done {
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-button);
+  background: var(--right-soft);
+  color: var(--ink);
+}
