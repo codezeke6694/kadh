@@ -16,3 +16,4 @@ The flows every screen is walked and judged against before a task closes.
 | J10 | learner | switch to Hindi buttons and another Kinnauri | /#/settings | choose "Hamskad"; tap "हिंदी" | the buttons read in Hindi and the games use Hamskad words |
 | J11 | learner | see their progress | / | open "Progress" | it shows words learned, the day streak and best scores per game |
 | J12 | learner | read one word on its own page | route: /#/word/cloud | look at the page | the page shows Cloud, बादल and the Hamskad, Navaskad and Pahari Kinnauri words, the chosen one first |
+| J13 | learner | start the day on the home screen | / | look at the home screen | the home screen shows the word of the day in Pahari Kinnauri and the six games |
