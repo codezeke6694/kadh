@@ -23,7 +23,7 @@ Type: story
 - look: for Kinnauri learners of every age, kids to elders; warm mountain feel from Kinnaur: apple-red accent, deodar green, snowy off-white background, rounded friendly cards, small celebrations on a right answer; playful, not childish; Devanagari must be large and clear; no ads, no pop-ups, no dark patterns.
 - security: the app only reads the public sheet; it never writes to it and holds no secrets or personal data. Sheet text is shown as text, never as HTML.
 - scale: about 1,200 words today, up to 10,000; any number of learners (a static site).
-- testing: `node --test tests/` for all logic (parsing, games, progress); the engine's browser walk of docs/journeys.md at 390, 820 and 1280 wide for screens.
+- testing: `node --test` for all logic (parsing, games, progress); the engine's browser walk of docs/journeys.md at 390, 820 and 1280 wide for screens.
 - release: commit to main and GitHub Pages serves it; a release is tagged with notes and a rollback point.
 - queues: not needed, because nothing runs in the background.
 - monitoring: not needed for v1, because it is a free static site with no server; GitHub Pages shows if a deploy failed.
@@ -52,7 +52,7 @@ Type: story
 
 ## Tasks
 - T1 Words: read and parse the dictionary | 1d | type: task | points: 3 | files: src/config.js, src/data/words.js, src/data/load.js, scripts/snapshot.mjs, data/sheet.csv, tests/data.test.js, package.json | rests on: J1, D2, D12 | check: `node --test tests/data.test.js`
-  docs/joins.md J1. package.json has `"type": "module"`, `"test": "node --test tests/"` and playwright-core as a dev dependency only (D11).
+  docs/joins.md J1. package.json has `"type": "module"`, `"test": "node --test"` and playwright-core as a dev dependency only (D11).
   accept: the words load from the copy in data/sheet.csv when the live sheet cannot be reached
   accept: the words load from the live Google Sheet when it answers
   accept: a cell "मुहवा / टिन" gives the two forms मुहवा and टिन
@@ -75,7 +75,7 @@ Type: story
   accept: every topic has a Hindi name
   accept: every topic has an icon
   accept: every topic holds at least 8 words
-- T4 App shell and the look | 1d | type: story | points: 3 | needs: T1, T2 | files: index.html, styles/base.css, src/app.js, src/i18n.js, src/i18n/shell.js, tests/shell.test.js | rests on: J4, D4, D9 | check: `node --test tests/`
+- T4 App shell and the look | 1d | type: story | points: 3 | needs: T1, T2 | files: index.html, styles/base.css, src/app.js, src/i18n.js, src/i18n/shell.js, tests/shell.test.js | rests on: J4, D4, D9 | check: `node --test`
   Load the frontend-design skill first: this sets the look every other screen uses. The router of J4, `t()`, a header with the app name and a language switch, a bottom bar (Home, Words, Play, Progress) on phones. index.html links styles/base.css and every per-part stylesheet named in docs/joins.md J4 (a missing one is harmless). A first visit with no chosen Kinnauri goes to #/welcome.
   accept: the header's language switch changes the buttons between English and Hindi
   accept: a first visit with no Kinnauri chosen opens the welcome route
@@ -116,7 +116,7 @@ Type: story
   accept: it shows how many words are learned
   accept: it shows the day streak
   accept: it shows the best score for each game played
-- T11 About page | 4h | type: story | points: 1 | needs: T4 | files: src/screens/about.js, src/i18n/about.js, styles/about.css | rests on: J4 | check: `node --test tests/`
+- T11 About page | 4h | type: story | points: 1 | needs: T4 | files: src/screens/about.js, src/i18n/about.js, styles/about.css | rests on: J4 | check: `node --test`
   What Kadh is, the three Kinnauri and where they are spoken, where the words come from.
   accept: the about page names the three Kinnauri
 - T12 Game: Flashcards | 1d | type: story | points: 3 | needs: T3, T6 | files: src/games/flashcards.js, src/games/flashcards.css, src/i18n/flashcards.js, tests/flashcards.test.js | rests on: J3 | check: `node --test tests/flashcards.test.js`
@@ -156,7 +156,7 @@ Type: story
   accept: the results show the score
   accept: each answer flashes right or wrong
   accept: the next pair appears at once after an answer
-- T18 Whole-product check and fixes | 1d | type: task | points: 3 | needs: T5, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17 | check: `node --test tests/`
+- T18 Whole-product check and fixes | 1d | type: task | points: 3 | needs: T5, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17 | check: `node --test`
   Walk every flow in docs/journeys.md at phone, tablet and laptop width; play every game in both languages and all three Kinnauri; file what fails as bugs into this plan.
   accept: every flow in docs/journeys.md passes at 390, 820 and 1280 wide
   accept: every game can be played to its results screen with each of the three Kinnauri
