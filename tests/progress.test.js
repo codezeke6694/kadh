@@ -156,6 +156,22 @@ test("everything still works when there is no storage at all", async () => {
   assert.equal(progress.getSettings().dialect, "hamskad");
 });
 
+test("saved progress of the wrong shape is replaced part by part", async () => {
+  storage.setItem(STORAGE_KEY, JSON.stringify({ dialect: "english", lang: "hi", words: "oops", best: [] }));
+  const progress = await loadProgress();
+  assert.deepEqual(progress.getSettings(), { dialect: null, lang: "hi" });
+  progress.recordAnswer("cloud", true, DAY_ONE);
+  assert.equal(wordState(storage, "cloud").box, 2);
+  assert.deepEqual(progress.getStats(DAY_ONE).best, {});
+});
+
+test("a word id such as __proto__ is kept as an ordinary word", async () => {
+  const progress = await loadProgress();
+  progress.recordAnswer("__proto__", true, DAY_ONE);
+  assert.equal({}.box, undefined);
+  assert.deepEqual(progress.dueWords([{ id: "constructor" }], DAY_FOUR, 5), []);
+});
+
 test("due words come back earliest first, only once due, at most n", async () => {
   const progress = await loadProgress();
   const words = [{ id: "cloud" }, { id: "ant" }, { id: "sun" }, { id: "never-seen" }];
