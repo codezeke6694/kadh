@@ -2,5 +2,6 @@
   "product": "kadh",
   "prototype": false,
   "book_auto_push": true,
-  "knowledge": "~/one-engine-knowledge/kadh"
+  "knowledge": "~/one-engine-knowledge/kadh",
+  "full_check": "node --test"
 }
