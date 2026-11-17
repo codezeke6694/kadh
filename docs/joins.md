@@ -79,6 +79,8 @@ export default {
 - `#/play/<id>` loads `src/games/kit.js` as the screen. The kit shows "coming soon" for a game not built yet,
   links `src/games/<id>.css` into the page once (so a game's own styles go there), then draws the topic picker:
   "All words" first, then each J5 topic with at least `minWords` words in the chosen Kinnauri.
+  `#/play/<id>/<topicId>` (`all` for All words; e.g. a word page's "Practise this topic") starts the game on
+  that topic at once; a topic the game cannot use (unknown, or too few words) shows the picker instead.
 - `mount` gets: `words` already filtered to the chosen Kinnauri and topic (never fewer than `minWords`);
   `dialect` (`"pahari" | "hamskad" | "navaskad"`, read `word.dialects[dialect].forms[0]`); `lang` (`"en" | "hi"`,
   the meaning to show is `word.en` or `word.hi`, falling back to `word.en` when `hi` is ""); `t(key)` for the game's own

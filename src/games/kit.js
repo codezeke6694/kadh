@@ -36,7 +36,10 @@ export default async function render(el, ctx, sources = { loadGame, loadTopics }
   if (!game) return renderComingSoon(doc, el, ctx.t);
   const words = forDialect(ctx.words, ctx.settings.dialect);
   const session = { doc, el, ctx, game, choices: topicChoices(words, topics, game.minWords), unmount: null };
-  showPicker(session);
+  // A topic named in the route (#/play/<id>/<topic>) skips the picker; one the game cannot use falls back to it.
+  const asked = session.choices.find((choice) => choice.id === ctx.params.topic);
+  if (asked) startGame(session, asked);
+  else showPicker(session);
   return () => stopGame(session);
 }
 

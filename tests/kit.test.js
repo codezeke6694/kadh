@@ -45,7 +45,7 @@ function makeFakeGame(id, minWords = 4) {
   return game;
 }
 
-async function open(game, { gameId = game?.id, lang = "en" } = {}) {
+async function open(game, { gameId = game?.id, topic, lang = "en" } = {}) {
   const doc = makeFakeDocument();
   const el = doc.createElement("main");
   const gone = [];
@@ -54,7 +54,7 @@ async function open(game, { gameId = game?.id, lang = "en" } = {}) {
     settings: { dialect: "pahari", lang },
     t,
     go: (hash) => gone.push(hash),
-    params: { gameId },
+    params: topic === undefined ? { gameId } : { gameId, topic },
   };
   const sources = { loadGame: async () => game, loadTopics: async () => TOPICS };
   const cleanup = await render(el, ctx, sources);
@@ -136,6 +136,35 @@ test("too few words in this Kinnauri says so and offers the way home", async () 
   assert.equal(topicButtons(el).length, 0);
   assert.match(el.textContent, /Not enough words/);
   assert.equal(findButton(el, "Back home").getAttribute("href"), "#/");
+});
+
+test("a route naming a topic skips the picker and plays that topic", async () => {
+  const game = makeFakeGame("flashcards");
+  await open(game, { topic: "nature" });
+  assert.deepEqual(game.mounts[0].words.map((w) => w.id), ["cloud", "snow", "river", "tree"]);
+});
+
+test("a route naming All words plays every word in the chosen Kinnauri", async () => {
+  const game = makeFakeGame("flashcards");
+  await open(game, { topic: ALL_WORDS });
+  assert.equal(game.mounts[0].words.length, 8);
+});
+
+test("a route naming a topic too small for the game, or unknown, shows the picker", async () => {
+  for (const topic of ["animals", "no-such-topic"]) {
+    const game = makeFakeGame("flashcards");
+    const { el } = await open(game, { topic });
+    assert.equal(game.mounts.length, 0, topic);
+    assert.equal(topicButtons(el).length, 2, topic);
+  }
+});
+
+test("Play again after a game from a topic route keeps that topic", async () => {
+  const game = makeFakeGame("flashcards");
+  const { el } = await open(game, { topic: "nature" });
+  game.mounts[0].onFinish({ score: 2, total: 4 });
+  findButton(el, "Play again").click();
+  assert.deepEqual(game.mounts[1].words.map((w) => w.id), ["cloud", "snow", "river", "tree"]);
 });
 
 test("choosing a topic mounts the game with that topic's words, the Kinnauri and the day", async () => {
