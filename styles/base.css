@@ -1,0 +1,437 @@
+/* Kadh's look (plan D9): snow, deodar and apple. Every colour any part uses is a token here. */
+
+:root {
+  --snow: #f3f6f5;
+  --surface: #ffffff;
+  --surface-soft: #e6efea;
+  --ink: #1f2a2e;
+  --ink-soft: #55666a;
+  --line: #d6e0dc;
+  --deodar: #24503b;
+  --deodar-deep: #193a2a;
+  --on-deodar: #f3f6f5;
+  --apple: #c62f3b;
+  --apple-deep: #a3222d;
+  --apple-soft: #fbe4e5;
+  --on-apple: #ffffff;
+  --right: #2f7a4f;
+  --right-soft: #dff1e5;
+  --wrong: #c62f3b;
+  --wrong-soft: #fbe4e5;
+  --shadow: 0 1px 0 rgba(36, 80, 59, 0.08), 0 10px 24px -14px rgba(25, 58, 42, 0.45);
+  --focus: #c62f3b;
+
+  --font-display: "Baloo 2", "Mukta", system-ui, sans-serif;
+  --font-body: "Mukta", "Noto Sans Devanagari", system-ui, sans-serif;
+  --text-sm: 0.9rem;
+  --text-base: 1.125rem;
+  --text-lg: 1.4rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.2rem;
+  --text-kinnauri: 2.6rem;
+
+  --radius-card: 22px;
+  --radius-button: 14px;
+  --radius-pill: 999px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --page-width: 60rem;
+  --tabbar-height: 4.25rem;
+  --ridge-height: 1.75rem;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --snow: #0f1a16;
+    --surface: #172520;
+    --surface-soft: #1f3129;
+    --ink: #e9f0ec;
+    --ink-soft: #a3b6ae;
+    --line: #2b3d35;
+    --deodar: #1d4331;
+    --deodar-deep: #12291e;
+    --on-deodar: #e9f0ec;
+    --apple: #ee5d68;
+    --apple-deep: #f47d86;
+    --apple-soft: #3a1f23;
+    --on-apple: #1a0d0f;
+    --right: #6cc794;
+    --right-soft: #1b3a29;
+    --wrong: #ee5d68;
+    --wrong-soft: #3a1f23;
+    --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 10px 24px -14px rgba(0, 0, 0, 0.8);
+    --focus: #f47d86;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--snow);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.55;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: 1.2;
+  margin: 0 0 var(--space-3);
+  color: var(--deodar);
+}
+
+h1 { font-size: var(--text-2xl); font-weight: 800; }
+h2 { font-size: var(--text-xl); font-weight: 700; }
+h3 { font-size: var(--text-lg); font-weight: 700; }
+
+@media (prefers-color-scheme: dark) {
+  h1, h2, h3 { color: var(--ink); }
+}
+
+p { margin: 0 0 var(--space-4); max-width: 65ch; }
+
+a { color: var(--apple-deep); }
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* The header: a deodar band whose lower edge is a mountain ridge. */
+.topbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: max(var(--space-3), env(safe-area-inset-top)) var(--space-4) var(--space-3);
+  padding-bottom: calc(var(--space-3) + var(--ridge-height) * 0.4);
+  background: var(--deodar);
+  color: var(--on-deodar);
+}
+
+.topbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% - 1px);
+  height: var(--ridge-height);
+  background: var(--deodar);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 24' preserveAspectRatio='none'%3E%3Cpath d='M0 0h240v6l-14 10-12-7-20 13-16-12-12 6-22-14-18 11-10-5-24 15-18-13-14 8-20-11-16 9-12-6-20 12-12-8z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 24' preserveAspectRatio='none'%3E%3Cpath d='M0 0h240v6l-14 10-12-7-20 13-16-12-12 6-22-14-18 11-10-5-24 15-18-13-14 8-20-11-16 9-12-6-20 12-12-8z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  margin-right: auto;
+  color: inherit;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.brand-name::after {
+  content: "";
+  display: inline-block;
+  width: 0.38em;
+  height: 0.38em;
+  margin-left: 0.12em;
+  border-radius: 50% 50% 50% 0;
+  background: var(--apple);
+  transform: rotate(-45deg);
+}
+
+.brand-tagline {
+  font-size: var(--text-sm);
+  opacity: 0.85;
+}
+
+.lang-switch {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--deodar-deep);
+}
+
+.lang-option {
+  min-height: 2.5rem;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--on-deodar);
+  font: 500 var(--text-sm) var(--font-body);
+  cursor: pointer;
+}
+
+.lang-option[aria-pressed="true"] {
+  background: var(--snow);
+  color: var(--deodar);
+  font-weight: 700;
+}
+
+.settings-link {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-pill);
+  color: var(--on-deodar);
+  font-size: 0;
+}
+
+.settings-link::before {
+  content: "";
+  width: 1.5rem;
+  height: 1.5rem;
+  background: currentColor;
+  -webkit-mask: var(--icon-settings) center / contain no-repeat;
+  mask: var(--icon-settings) center / contain no-repeat;
+}
+
+/* The tabs: a bar along the bottom on phones, inside the header from tablet width up. */
+.tabs {
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  height: calc(var(--tabbar-height) + env(safe-area-inset-bottom));
+  padding: var(--space-1) var(--space-2) env(safe-area-inset-bottom);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  box-shadow: var(--shadow);
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: var(--radius-button);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.tab::before {
+  content: "";
+  width: 1.6rem;
+  height: 1.6rem;
+  background: currentColor;
+  -webkit-mask: var(--tab-icon) center / contain no-repeat;
+  mask: var(--tab-icon) center / contain no-repeat;
+}
+
+.tab[aria-current="page"] {
+  color: var(--apple);
+  font-weight: 700;
+}
+
+.tab[aria-current="page"]::before {
+  background: var(--apple);
+}
+
+:root {
+  --icon-settings: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4 7h10M18 7h2M4 17h4M12 17h8'/%3E%3Ccircle cx='16' cy='7' r='2'/%3E%3Ccircle cx='10' cy='17' r='2'/%3E%3C/svg%3E");
+}
+
+.tab[data-tab="home"] {
+  --tab-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M2 20l7-12 4 6 3-4 6 10z'/%3E%3C/svg%3E");
+}
+.tab[data-tab="words"] {
+  --tab-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M4 4h7a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4zM20 4h-5a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h5z'/%3E%3C/svg%3E");
+}
+.tab[data-tab="play"] {
+  --tab-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='5'/%3E%3Ccircle cx='8.5' cy='8.5' r='1' fill='black'/%3E%3Ccircle cx='15.5' cy='15.5' r='1' fill='black'/%3E%3Ccircle cx='12' cy='12' r='1' fill='black'/%3E%3C/svg%3E");
+}
+.tab[data-tab="progress"] {
+  --tab-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 20h18M6 16v-3M11 16V9M16 16V5'/%3E%3C/svg%3E");
+}
+
+/* The page area. */
+.view {
+  width: 100%;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: calc(var(--ridge-height) + var(--space-4)) var(--space-4) var(--space-6);
+  outline: none;
+}
+
+.footer {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-4) calc(var(--tabbar-height) + var(--space-5) + env(safe-area-inset-bottom));
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+@media (min-width: 760px) {
+  .topbar {
+    padding-left: max(var(--space-5), calc((100% - var(--page-width)) / 2 + var(--space-4)));
+    padding-right: max(var(--space-5), calc((100% - var(--page-width)) / 2 + var(--space-4)));
+  }
+
+  .tabs {
+    position: static;
+    display: flex;
+    gap: var(--space-1);
+    height: auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .tab {
+    flex-direction: row;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-pill);
+    color: var(--on-deodar);
+    font-size: var(--text-base);
+  }
+
+  .tab::before { width: 1.25rem; height: 1.25rem; }
+
+  .tab:hover { background: var(--deodar-deep); }
+
+  .tab[aria-current="page"] {
+    background: var(--snow);
+    color: var(--deodar);
+  }
+
+  .tab[aria-current="page"]::before { background: var(--apple); }
+
+  .footer { padding-bottom: var(--space-6); }
+}
+
+/* Shared pieces every screen may use. */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+  box-shadow: var(--shadow);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 3rem;
+  padding: 0 var(--space-5);
+  border: 2px solid transparent;
+  border-radius: var(--radius-button);
+  background: var(--apple);
+  color: var(--on-apple);
+  font: 700 var(--text-base) var(--font-display);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover { background: var(--apple-deep); }
+
+.button.secondary {
+  background: transparent;
+  border-color: var(--deodar);
+  color: var(--deodar);
+}
+
+@media (prefers-color-scheme: dark) {
+  .button.secondary { border-color: var(--ink-soft); color: var(--ink); }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 2.5rem;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink);
+  font: 500 var(--text-sm) var(--font-body);
+  cursor: pointer;
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--deodar);
+  border-color: var(--deodar);
+  color: var(--on-deodar);
+}
+
+/* A Kinnauri or Hindi word shown to be learned: large, so matras read clearly at any age. */
+.kinnauri {
+  font-family: var(--font-display);
+  font-size: var(--text-kinnauri);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.muted { color: var(--ink-soft); }
+
+.right { background: var(--right-soft); border-color: var(--right); }
+.wrong { background: var(--wrong-soft); border-color: var(--wrong); }
+
+/* The shell's own pages: loading, not found, coming soon, something failed. */
+.notice {
+  max-width: 34rem;
+  margin: var(--space-6) auto;
+  text-align: center;
+}
+
+.notice p { margin-left: auto; margin-right: auto; }
+
+.notice-detail {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
