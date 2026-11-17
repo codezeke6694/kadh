@@ -1,0 +1,138 @@
+/* Match pairs: Kinnauri tiles in deodar green on the left, paper-white meanings on the right. */
+
+.mp-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.mp-board-count,
+.mp-clock {
+  margin: 0;
+  font: 700 var(--text-base) var(--font-display);
+}
+
+.mp-clock {
+  font-variant-numeric: tabular-nums;
+  color: var(--deodar);
+}
+
+.mp-howto { margin: var(--space-1) 0 var(--space-4); }
+
+.mp-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.mp-column {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+}
+
+.mp-column-label {
+  margin: 0;
+  font: 600 var(--text-sm) var(--font-body);
+  color: var(--ink-soft);
+}
+
+.mp-card {
+  min-height: 4rem;
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-button);
+  background: var(--surface);
+  color: var(--ink);
+  font: 600 var(--text-base) / 1.25 var(--font-body);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 120ms ease, border-color 120ms ease;
+}
+
+.mp-kinnauri {
+  background: var(--deodar);
+  border-color: var(--deodar);
+  color: var(--on-deodar);
+  font: 700 1.75rem / 1.35 var(--font-display);
+}
+
+.mp-card:hover:not(:disabled) { border-color: var(--apple); }
+
+.mp-card.mp-picked {
+  border-color: var(--apple);
+  box-shadow: 0 0 0 3px var(--apple-soft), var(--shadow);
+  transform: translateY(-2px);
+}
+
+.mp-card.mp-right,
+.mp-card.mp-right:disabled {
+  background: var(--right-soft);
+  border-color: var(--right);
+  color: var(--right);
+  cursor: default;
+  box-shadow: none;
+  animation: mp-pop 320ms ease-out;
+}
+
+.mp-card.mp-wrong {
+  background: var(--wrong-soft);
+  border-color: var(--wrong);
+  color: var(--ink);
+  animation: mp-shake 420ms ease-in-out;
+}
+
+.mp-feedback {
+  min-height: 1.75rem;
+  margin: var(--space-4) 0 0;
+  text-align: center;
+  font: 700 var(--text-lg) var(--font-display);
+}
+
+.mp-feedback-right { color: var(--right); }
+.mp-feedback-wrong { color: var(--wrong); }
+
+.mp-done {
+  margin-top: var(--space-5);
+  text-align: center;
+}
+
+.mp-done-title { font-size: var(--text-xl); }
+
+.mp-time-taken {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-4) 0;
+}
+
+.mp-time-label { color: var(--ink-soft); }
+
+.mp-time-value {
+  font: 800 3.5rem / 1 var(--font-display);
+  font-variant-numeric: tabular-nums;
+  color: var(--deodar);
+}
+
+.mp-first-try { margin-bottom: var(--space-5); }
+
+@media (prefers-color-scheme: dark) {
+  .mp-clock,
+  .mp-time-value { color: var(--right); }
+}
+
+@media (min-width: 48rem) {
+  .mp-columns { gap: var(--space-5); }
+  .mp-kinnauri { font-size: var(--text-2xl); }
+}
+
+@keyframes mp-pop {
+  50% { transform: scale(1.06); }
+}
+
+@keyframes mp-shake {
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}

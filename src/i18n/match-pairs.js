@@ -1,0 +1,33 @@
+// Match pairs: the words in its play area (the kit draws the rest).
+export default {
+  en: {
+    "matchPairs.board": "Board",
+    "matchPairs.of": "of",
+    "matchPairs.time": "Time",
+    "matchPairs.kinnauri": "Kinnauri",
+    "matchPairs.meaning": "Meaning",
+    "matchPairs.howTo": "Tap a Kinnauri word, then its meaning.",
+    "matchPairs.right": "A pair!",
+    "matchPairs.wrong": "Not a pair. Try again.",
+    "matchPairs.boardDone": "Board cleared!",
+    "matchPairs.doneTitle": "All three boards cleared",
+    "matchPairs.timeTaken": "Time taken",
+    "matchPairs.firstTry": "Pairs right first try",
+    "matchPairs.seeScore": "See my score",
+  },
+  hi: {
+    "matchPairs.board": "बोर्ड",
+    "matchPairs.of": "में से",
+    "matchPairs.time": "समय",
+    "matchPairs.kinnauri": "किन्नौरी",
+    "matchPairs.meaning": "अर्थ",
+    "matchPairs.howTo": "किन्नौरी शब्द चुनें, फिर उसका अर्थ।",
+    "matchPairs.right": "जोड़ी मिली!",
+    "matchPairs.wrong": "यह जोड़ी नहीं है। फिर कोशिश करें।",
+    "matchPairs.boardDone": "बोर्ड पूरा!",
+    "matchPairs.doneTitle": "तीनों बोर्ड पूरे",
+    "matchPairs.timeTaken": "लगा समय",
+    "matchPairs.firstTry": "पहली बार में सही जोड़ियाँ",
+    "matchPairs.seeScore": "मेरा स्कोर देखें",
+  },
+};
