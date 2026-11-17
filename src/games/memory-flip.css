@@ -1,0 +1,137 @@
+/* Memory flip: card backs are woven like a Kinnauri shawl border; faces turn over in 3D. */
+.memory {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 46rem;
+  margin: 0 auto;
+}
+
+.memory-moves {
+  margin: 0;
+  justify-self: end;
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--surface-soft);
+  font: 700 var(--text-base) var(--font-display);
+  color: var(--deodar);
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 640px) {
+  .memory-grid { grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
+}
+
+.memory-card {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  min-height: 6.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  perspective: 900px;
+  font: inherit;
+  color: inherit;
+}
+
+.memory-card:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: var(--radius-card); }
+
+.memory-back,
+.memory-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-card);
+  backface-visibility: hidden;
+  transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.3, 1.2);
+  box-shadow: var(--shadow);
+}
+
+/* The woven border: apple-red and snow bands framing deep deodar green. */
+.memory-back {
+  background:
+    repeating-linear-gradient(45deg, var(--apple) 0 6px, var(--on-deodar) 6px 9px, var(--deodar) 9px 15px) border-box;
+  border: 9px solid transparent;
+  background-clip: border-box;
+}
+
+.memory-back::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--radius-card) - 9px);
+  background: radial-gradient(circle at 50% 50%, var(--deodar) 0 55%, var(--deodar-deep) 100%);
+}
+
+.memory-face {
+  padding: var(--space-2);
+  border: 2px solid var(--line);
+  background: var(--surface);
+  transform: rotateY(180deg);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.memory-word {
+  font: 700 clamp(1.4rem, 5.5vw, 2.1rem) / 1.35 var(--font-display);
+  color: var(--ink);
+}
+
+.memory-meaning {
+  background: var(--surface-soft);
+  font: 500 clamp(1rem, 3.6vw, 1.25rem) / 1.3 var(--font-body);
+  color: var(--ink-soft);
+}
+
+.memory-card.is-up .memory-back { transform: rotateY(-180deg); }
+.memory-card.is-up .memory-face { transform: rotateY(0); }
+.memory-card.is-up { cursor: default; }
+
+.memory-card.is-matched .memory-face {
+  border-color: var(--right);
+  background: var(--right-soft);
+  animation: memory-pop 0.5s ease-out;
+}
+
+.memory-card.is-matched .memory-word { color: var(--right); }
+
+@keyframes memory-pop {
+  0% { scale: 1; }
+  40% { scale: 1.08; }
+  100% { scale: 1; }
+}
+
+.memory-feedback {
+  min-height: 1.6em;
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-base);
+  color: var(--ink-soft);
+}
+
+.memory-done {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.memory-done-title { margin: 0; font-family: var(--font-display); }
+
+.memory-done-moves {
+  margin: 0;
+  font: 700 var(--text-2xl) var(--font-display);
+  color: var(--deodar);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .memory-back,
+  .memory-face { transition: none; }
+  .memory-card.is-matched .memory-face { animation: none; }
+}
