@@ -38,19 +38,27 @@ async function readTopicsMap() {
   }
 }
 
+// Throws when the sheet cannot be reached, is not the sheet, or is too short to be the dictionary.
+export async function fetchLiveWords(topicsMap) {
+  const text = await fetchText(SHEET_CSV_URL);
+  const words = toWords(parseCsv(text), topicsMap);
+  if (words.length < MIN_SHEET_WORDS) {
+    throw new Error(`the live sheet has ${words.length} words, fewer than ${MIN_SHEET_WORDS}`);
+  }
+  return { text, words };
+}
+
 async function refreshFromLiveSheet(topicsMap) {
-  let text;
+  let live;
   try {
-    text = await fetchText(SHEET_CSV_URL);
+    live = await fetchLiveWords(topicsMap);
   } catch (error) {
-    // Offline or blocked: the copy already shown stays, quietly.
-    console.warn("live sheet not reached:", error);
+    // Offline, blocked or a broken sheet: the copy already shown stays, quietly.
+    console.warn("live sheet not used:", error);
     return;
   }
-  const words = toWords(parseCsv(text), topicsMap);
-  if (words.length < MIN_SHEET_WORDS) return;
-  keepCachedSheet(text);
-  for (const fn of listeners) fn(words);
+  keepCachedSheet(live.text);
+  for (const fn of listeners) fn(live.words);
 }
 
 // Storage can be blocked (private mode, settings); the app runs without it.

@@ -2,7 +2,7 @@ import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { parseCsv, toWords, splitForms, forDialect, byTopic, MIN_SHEET_WORDS } from "../src/data/words.js";
-import { loadWords, onWordsUpdated, SHEET_CACHE_KEY } from "../src/data/load.js";
+import { loadWords, onWordsUpdated, fetchLiveWords, SHEET_CACHE_KEY } from "../src/data/load.js";
 import { SHEET_CSV_URL } from "../src/config.js";
 
 const HEADER = "English,Hindi,Hamskad,Navaskad,Pahari Kinnauri";
@@ -198,6 +198,56 @@ test("a live sheet with fewer than the minimum words is not used", async () => {
   assert.equal(words[0].en, "Copy word");
   assert.equal(updated, false);
   assert.equal(localStorage.getItem(SHEET_CACHE_KEY), null);
+});
+
+test("a live answer that is not the sheet (an HTML page) keeps the copy, with no unhandled rejection", async () => {
+  const rejections = [];
+  const onRejection = (reason) => rejections.push(reason);
+  process.on("unhandledRejection", onRejection);
+  let updated = false;
+  const stop = onWordsUpdated(() => (updated = true));
+  let answered;
+  const liveDone = new Promise((resolve) => (answered = resolve));
+  globalThis.fetch = fakeFetch({
+    copy: sheetText("Copy word", MIN_SHEET_WORDS),
+    topics: null,
+    live: async () => {
+      answered();
+      return new Response("<!doctype html><html><body>Sign in</body></html>");
+    },
+  });
+  try {
+    const words = await loadWords();
+    await liveDone;
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    assert.equal(words[0].en, "Copy word");
+    assert.equal(updated, false);
+    assert.equal(localStorage.getItem(SHEET_CACHE_KEY), null);
+    assert.deepEqual(rejections, []);
+  } finally {
+    stop();
+    process.off("unhandledRejection", onRejection);
+  }
+});
+
+test("fetchLiveWords gives the live sheet's text and words", async () => {
+  const live = sheetText("Live word", MIN_SHEET_WORDS);
+  globalThis.fetch = fakeFetch({ copy: "", topics: null, live: async () => new Response(live) });
+  const { text, words } = await fetchLiveWords({ "Live word": "nature" });
+  assert.equal(text, live);
+  assert.equal(words.length, MIN_SHEET_WORDS);
+  assert.equal(words[0].topic, "nature");
+});
+
+test("fetchLiveWords refuses a failed answer and a sheet below the minimum", async () => {
+  globalThis.fetch = fakeFetch({ copy: "", topics: null, live: async () => new Response("", { status: 500 }) });
+  await assert.rejects(fetchLiveWords({}), /500/);
+  globalThis.fetch = fakeFetch({
+    copy: "",
+    topics: null,
+    live: async () => new Response(sheetText("Short", MIN_SHEET_WORDS - 1)),
+  });
+  await assert.rejects(fetchLiveWords({}), new RegExp(`${MIN_SHEET_WORDS - 1} words`));
 });
 
 test("blocked storage still loads the copy", async () => {
