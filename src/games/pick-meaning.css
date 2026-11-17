@@ -53,6 +53,10 @@
   color: var(--deodar);
 }
 
+@media (prefers-color-scheme: dark) {
+  .pm-reverse .pm-prompt { color: var(--ink); }
+}
+
 .pm-choices {
   display: grid;
   grid-template-columns: 1fr 1fr;
