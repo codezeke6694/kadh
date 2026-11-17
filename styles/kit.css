@@ -1,0 +1,191 @@
+/* The game kit: the topic picker before a game, the bar during it, the results after. */
+
+.kit {
+  max-width: 46rem;
+  margin: 0 auto;
+}
+
+.kit-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.kit-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: var(--radius-button);
+  background: var(--surface-soft);
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.kit-title { margin: 0; }
+
+.kit-blurb { margin-bottom: var(--space-5); }
+
+.kit-question {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-3);
+}
+
+/* Topics: "All words" runs the full width, the topics tile below it. */
+.kit-topics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+  gap: var(--space-3);
+}
+
+.kit-topic {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "icon name" "icon count";
+  align-items: center;
+  column-gap: var(--space-3);
+  min-height: 4.25rem;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-button);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+.kit-topic:hover { border-color: var(--deodar); }
+
+.kit-topic-icon {
+  grid-area: icon;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.kit-topic-name {
+  grid-area: name;
+  font: 700 var(--text-base) / 1.25 var(--font-display);
+}
+
+.kit-topic-count {
+  grid-area: count;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.kit-topic-all {
+  grid-column: 1 / -1;
+  min-height: 5rem;
+  background: var(--deodar);
+  border-color: var(--deodar);
+  color: var(--on-deodar);
+}
+
+.kit-topic-all .kit-topic-name { font-size: var(--text-lg); }
+.kit-topic-all .kit-topic-count { color: var(--on-deodar); opacity: 0.85; }
+.kit-topic-all:hover { background: var(--deodar-deep); }
+
+.kit-empty { margin-top: var(--space-4); }
+
+/* During a game: the game's name, the words in play, a way out; the game draws below. */
+.kit-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.kit-bar .kit-heading { margin: 0; }
+.kit-bar .kit-icon { width: 2.5rem; height: 2.5rem; font-size: 1.4rem; }
+.kit-bar .kit-title { font-size: var(--text-lg); }
+
+.kit-bar-topic { margin: 0; }
+
+.kit-other {
+  margin-left: auto;
+  min-height: 2.5rem;
+  padding: 0 var(--space-4);
+  font-size: var(--text-sm);
+}
+
+/* Results: the score is the one big thing on the page. */
+.kit-results {
+  text-align: center;
+}
+
+.kit-results .kit-heading { justify-content: center; }
+
+.kit-results-title {
+  font-size: var(--text-lg);
+  color: var(--ink-soft);
+  margin: var(--space-4) 0 0;
+}
+
+.kit-tally {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--space-2);
+  margin: 0 auto;
+  font-family: var(--font-display);
+  line-height: 1.1;
+}
+
+.kit-score {
+  font-size: clamp(5rem, 22vw, 8rem);
+  font-weight: 800;
+  color: var(--deodar);
+}
+
+.kit-total {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.kit-best {
+  margin: 0 auto var(--space-2);
+  font: 700 var(--text-lg) var(--font-display);
+}
+
+.kit-new-best {
+  display: inline-block;
+  margin: 0 auto var(--space-3);
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--apple-soft);
+  color: var(--apple-deep);
+  font-weight: 700;
+  animation: kit-pop 420ms ease-out;
+}
+
+.kit-results .kit-bar-topic { margin: 0 auto var(--space-5); }
+
+.kit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+@media (max-width: 30rem) {
+  .kit-actions { flex-direction: column; }
+  .kit-other { margin-left: 0; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .kit-score { color: var(--right); }
+}
+
+@keyframes kit-pop {
+  from { transform: scale(0.7); opacity: 0; }
+  70% { transform: scale(1.08); opacity: 1; }
+  to { transform: scale(1); }
+}
