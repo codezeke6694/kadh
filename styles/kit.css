@@ -45,6 +45,7 @@
   grid-template-columns: auto 1fr;
   grid-template-areas: "icon name" "icon count";
   align-items: center;
+  align-content: center;
   column-gap: var(--space-3);
   min-height: 4.25rem;
   padding: var(--space-3) var(--space-4);
