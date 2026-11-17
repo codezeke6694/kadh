@@ -65,7 +65,7 @@
 
 .word-row {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   grid-template-areas:
     "kinnauri kinnauri"
     "en hi";
@@ -86,6 +86,9 @@
   color: var(--deodar);
   overflow-wrap: anywhere;
 }
+
+.word-row-en,
+.word-row-hi { overflow-wrap: anywhere; }
 
 .word-row-en { grid-area: en; font-weight: 700; }
 
