@@ -16,7 +16,7 @@ export function dialectsInOrder(chosen) {
 }
 
 export function practiseHash(topicId) {
-  return `#/play/${PRACTISE_GAME}?topic=${encodeURIComponent(topicId)}`;
+  return `#/play/${PRACTISE_GAME}/${encodeURIComponent(topicId)}`;
 }
 
 // The topic's name and icon are a nicety: offline or broken, the page shows the topic id.

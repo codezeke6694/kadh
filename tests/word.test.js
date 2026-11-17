@@ -101,8 +101,9 @@ test("the chosen Kinnauri comes first, then the other two", () => {
 });
 
 test("Practise this topic leads to flashcards on the word's topic", () => {
-  assert.equal(practiseHash("nature"), "#/play/flashcards?topic=nature");
-  assert.equal(practiseHash("a b"), "#/play/flashcards?topic=a%20b");
+  assert.equal(practiseHash("nature"), "#/play/flashcards/nature");
+  assert.equal(practiseHash("a b/c?"), "#/play/flashcards/a%20b%2Fc%3F");
+  assert.match(practiseHash("food-and-plants"), /^#\/play\/flashcards\/[^/?]+$/, "no query, one topic segment");
 });
 
 test("a word page shows the English and Hindi words", async () => {
@@ -142,7 +143,7 @@ test("the page shows the topic in the chosen language and links to practise it",
   assert.match(findByClass(el, "word-topic")[0].textContent, /Nature/);
   const practise = findByClass(el, "word-practise")[0];
   assert.equal(practise.textContent, "Practise this topic");
-  assert.equal(practise.getAttribute("href"), "#/play/flashcards?topic=nature");
+  assert.equal(practise.getAttribute("href"), "#/play/flashcards/nature");
 
   setLang("hi");
   const hindi = await show("cloud", { dialect: "pahari", lang: "hi" });
