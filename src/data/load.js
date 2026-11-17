@@ -27,15 +27,25 @@ async function fetchText(url) {
 }
 
 // Topics are optional: without the file every word falls under the unknown topic.
-async function readTopicsMap() {
+async function readTopicsFile() {
   try {
     const response = await fetch(TOPICS_URL);
-    if (!response.ok) return {};
-    return (await response.json()).words ?? {};
+    if (!response.ok) throw new Error(`${TOPICS_URL}: ${response.status} ${response.statusText}`);
+    return await response.json();
   } catch (error) {
     console.warn("topics not loaded:", error);
     return {};
   }
+}
+
+async function readTopicsMap() {
+  return (await readTopicsFile()).words ?? {};
+}
+
+// J5's topic list ({ id, en, hi, icon }), empty when the file cannot be read.
+export async function loadTopics() {
+  const { topics } = await readTopicsFile();
+  return Array.isArray(topics) ? topics : [];
 }
 
 // Throws when the sheet cannot be reached, is not the sheet, or is too short to be the dictionary.

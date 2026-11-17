@@ -63,23 +63,38 @@ A word is "learned" at box 4 or above. Right moves a word up one box, wrong send
 
 ```js
 export default {
-  id: "flashcards",
-  title: { en: "Flashcards", hi: "फ़्लैशकार्ड" },
-  blurb: { en: "...", hi: "..." },
+  id: "flashcards",            // must equal the file name
+  title: { en: "Flashcards", hi: "फ़्लैशकार्ड" },   // both languages, non-empty
+  blurb: { en: "...", hi: "..." },                  // one line under the title in the topic picker
   icon: "🃏",
-  minWords: 4,
-  mount(el, { words, dialect, lang, t, onAnswer, onFinish }) { /* draws into el; returns an unmount function */ },
+  minWords: 4,                 // whole number >= 1; topics with fewer words (in the chosen Kinnauri) are not offered
+  mount(el, { words, dialect, lang, t, today, onAnswer, onFinish }) { /* draws into el; returns an unmount function */ },
 };
 ```
 
-- `words` are already filtered to the chosen dialect and topic.
-- `onAnswer(wordId, correct)` for every answer; `onFinish({ score, total })` once at the end.
-- The shell (src/games/kit.js) draws the topic picker before and the results screen after
-  (score, best, "Play again", "Back home"). A game draws only its play area.
+- `src/games/index.js`: `GAME_IDS` (the six, in this order), `isGameId(id)`, `loadGame(id) -> game | null`
+  (null while the file is not built; an unknown id throws RangeError), `loadGames() -> [{ id, game }]` for home,
+  and `checkGame(game, id)`, which `loadGame` runs: a module that breaks this contract throws a TypeError naming
+  the file and the field, and the shell shows it. `tests/kit.test.js` runs `checkGame` on every built game.
+- `#/play/<id>` loads `src/games/kit.js` as the screen. The kit shows "coming soon" for a game not built yet,
+  links `src/games/<id>.css` into the page once (so a game's own styles go there), then draws the topic picker:
+  "All words" first, then each J5 topic with at least `minWords` words in the chosen Kinnauri.
+  `#/play/<id>/<topicId>` (`all` for All words; e.g. a word page's "Practise this topic") starts the game on
+  that topic at once; a topic the game cannot use (unknown, or too few words) shows the picker instead.
+- `mount` gets: `words` already filtered to the chosen Kinnauri and topic (never fewer than `minWords`);
+  `dialect` (`"pahari" | "hamskad" | "navaskad"`, read `word.dialects[dialect].forms[0]`); `lang` (`"en" | "hi"`,
+  the meaning to show is `word.en` or `word.hi`, falling back to `word.en` when `hi` is ""); `t(key)` for the game's own
+  strings in `src/i18n/<id>.js`; `today` (`"YYYY-MM-DD"`, the learner's local date, for `dueWords`).
+- `onAnswer(wordId, correct)` once for every answer; the kit keeps it in progress (`recordAnswer`).
+- `onFinish({ score, total })` once at the end: whole numbers, `0 <= score <= total`, a higher score is better
+  (it is the game's best score). A call after the first is ignored; a bad score throws, naming the game.
+  The kit then calls the unmount function, so it must stop every timer and key listener the game started.
+- The kit draws a bar above the play area (game name, the words in play, "Choose other words") and the results
+  screen after (score / total, best, "Play again" with the same words, "Choose other words", "Back home").
+  A game draws only its play area, and only inside `el`.
 - Game logic sits in exported pure functions (for example `makeRound(words, n, rng)`), tested in `tests/<id>.test.js`.
-- The six ids: `flashcards`, `pick-meaning`, `match-pairs`, `memory-flip`, `word-builder`, `true-false`.
-  `src/games/index.js` lists them and loads each with `import()`; it is written once in T2, and a game file that
-  is not there yet shows as "coming soon".
+  `tests/fake-dom.js` is a small stand-in document (`makeFakeDocument`, `findByClass`, `findButton`,
+  `useFakeStorage`) for testing `mount` under `node --test`.
 
 ## J4 Screens and words on screen (src/app.js, src/i18n.js)
 
@@ -105,3 +120,5 @@ Routes (hash, so GitHub Pages needs nothing):
 ```
 
 The sheet's own `Topic` column, once added, wins over this map for the words it names.
+`loadTopics()` in src/data/load.js gives the `topics` list (empty when the file cannot be read); the topic
+picker shows topics in that order.
