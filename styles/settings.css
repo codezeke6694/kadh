@@ -36,6 +36,14 @@
   line-height: 1.2;
 }
 
+.dialect-roman {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  opacity: 0.8;
+}
+
 .dialect-option .dialect-example {
   color: inherit;
   overflow-wrap: anywhere;

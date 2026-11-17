@@ -245,4 +245,11 @@ test("the settings screen reads in Hindi when Hindi is chosen", () => {
   setLang("hi");
   const { el } = makeScreen(renderSettings);
   assert.match(el.textContent, /प्रगति/);
+  assert.match(option(el, "hamskad").textContent, /हमस्कद/);
+  assert.match(option(el, "hamskad").textContent, /Hamskad/, "the sheet's name stays beside the Hindi one");
+});
+
+test("in English each Kinnauri is named once", () => {
+  const { el } = makeScreen(renderWelcome);
+  assert.equal(findByClass(el, "dialect-roman").length, 0);
 });

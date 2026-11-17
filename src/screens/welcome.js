@@ -21,7 +21,14 @@ export function makeText(doc, tag, className, text, attributes = {}) {
 
 function makeOption(doc, t, dialect, example) {
   const button = make(doc, "button", "dialect-option", { type: "button", role: "radio", "data-dialect": dialect });
-  button.append(makeText(doc, "span", "dialect-name", t(`settings.dialect.${dialect}`)));
+  const label = t(`settings.dialect.${dialect}`);
+  const name = make(doc, "span", "dialect-name");
+  name.append(makeText(doc, "span", "", label));
+  // In Hindi the sheet's own name stays beside it, the name the learner meets everywhere else.
+  if (label !== DIALECT_COLUMNS[dialect]) {
+    name.append(makeText(doc, "span", "dialect-roman", DIALECT_COLUMNS[dialect], { lang: "en" }));
+  }
+  button.append(name);
   if (example) {
     button.append(makeText(doc, "span", "dialect-example kinnauri", example.dialects[dialect].forms[0]));
   }
