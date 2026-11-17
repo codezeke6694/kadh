@@ -4,7 +4,7 @@ The flows every screen is walked and judged against before a task closes.
 
 | id | who | their job | where it starts | steps | what shows when it is done |
 |----|-----|-----------|-----------------|-------|----------------------------|
-| J01 | learner | choose which Kinnauri to learn on first visit | / | choose "Pahari Kinnauri"; tap "Start learning" | the home screen shows the word of the day in Pahari Kinnauri and the six games |
+| J01 | new learner | choose which Kinnauri to learn on first visit | / | choose "Pahari Kinnauri"; tap "Start learning" | the home screen shows the word of the day in Pahari Kinnauri and the six games |
 | J02 | learner | look up a word | /#/words | type "Cloud" in Search; open "Cloud" | the word page shows Cloud, बादल and its Hamskad, Navaskad and Pahari Kinnauri words |
 | J03 | learner | browse words by topic | /#/words | tap "Animals" | the list shows only animal words, each with its meaning and the chosen Kinnauri word |
 | J04 | learner | learn with flashcards | /#/play/flashcards | tap the card; tap "I knew it" | the card turns to show the meaning, and the next card appears with the count going up |
