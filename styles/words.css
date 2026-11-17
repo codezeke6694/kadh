@@ -1,0 +1,126 @@
+/* The word list: a search bar that stays in reach, topic chips, and rows led by the Kinnauri word. */
+
+.words-page h1 { margin-bottom: var(--space-4); }
+
+.words-search {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-2) 0 var(--space-3);
+  background: var(--snow);
+}
+
+.words-search-label {
+  font-weight: 700;
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.words-search input {
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 0 var(--space-4);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-button);
+  background: var(--surface);
+  color: var(--ink);
+  font: 500 var(--text-lg) var(--font-body);
+}
+
+.words-search input:focus-visible {
+  border-color: var(--deodar);
+  outline-offset: 1px;
+}
+
+/* Phones: one swipeable line of chips; wider screens: they wrap. */
+.words-topics {
+  display: flex;
+  gap: var(--space-2);
+  margin: 0 calc(var(--space-4) * -1) var(--space-3);
+  padding: var(--space-1) var(--space-4);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.words-topics .chip { flex: none; white-space: nowrap; }
+
+.words-count { margin: 0 0 var(--space-2); font-size: var(--text-sm); }
+
+.words-list {
+  list-style: none;
+  margin: 0 0 var(--space-5);
+  padding: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.words-list:empty { display: none; }
+
+.words-list li + li { border-top: 1px solid var(--line); }
+
+.word-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "kinnauri kinnauri"
+    "en hi";
+  align-items: baseline;
+  column-gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.word-row:hover { background: var(--surface-soft); }
+
+.word-row:focus-visible { outline-offset: -3px; }
+
+/* Size and face come from .kinnauri (base.css), so Devanagari stays large. */
+.word-row-kinnauri {
+  grid-area: kinnauri;
+  color: var(--deodar);
+  overflow-wrap: anywhere;
+}
+
+.word-row-en { grid-area: en; font-weight: 700; }
+
+.word-row-hi {
+  grid-area: hi;
+  font-size: var(--text-lg);
+  color: var(--ink-soft);
+  text-align: right;
+}
+
+@media (prefers-color-scheme: dark) {
+  .word-row-kinnauri { color: var(--ink); }
+}
+
+.words-more { display: flex; margin: 0 auto; }
+
+.words-more[hidden] { display: none; }
+
+@media (min-width: 760px) {
+  .words-topics {
+    flex-wrap: wrap;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    overflow: visible;
+  }
+
+  .word-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr);
+    grid-template-areas: "en hi kinnauri";
+    padding: var(--space-3) var(--space-5);
+  }
+
+  .word-row-hi { text-align: left; }
+
+  .word-row-kinnauri { text-align: right; }
+}
