@@ -110,7 +110,7 @@
 
 .home-game-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-3);
 }
 
@@ -169,7 +169,7 @@
 
 @media (min-width: 760px) {
   .home-top {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     align-items: stretch;
   }
 
@@ -187,7 +187,7 @@
     text-align: left;
   }
 
-  .home-game-list { grid-template-columns: repeat(3, 1fr); }
+  .home-game-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
   .home-game { min-height: 11rem; padding: var(--space-5); }
 }
