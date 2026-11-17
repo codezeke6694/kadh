@@ -1,0 +1,59 @@
+/* The about page: the three Kinnauri stand as three peaks, the rest stays quiet. */
+
+.about {
+  display: grid;
+  gap: var(--space-5);
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+.about-lead {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+}
+
+.about-section p:last-child { margin-bottom: 0; }
+
+.about-dialects {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each name sits on a small ridge, echoing the header's mountain edge. */
+.about-dialect {
+  position: relative;
+  padding: var(--space-4) var(--space-4) calc(var(--space-4) + var(--space-2));
+  border-radius: var(--radius-button);
+  background: var(--surface-soft);
+  color: var(--deodar);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1.35;
+  overflow: hidden;
+}
+
+.about-dialect::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--space-3);
+  background: var(--deodar);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M0 12l18-8 12 5 22-9 16 7 14-4 20 9 18-6v6z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M0 12l18-8 12 5 22-9 16 7 14-4 20 9 18-6v6z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+@media (prefers-color-scheme: dark) {
+  .about-dialect { color: var(--ink); }
+  .about-dialect::after { background: var(--apple); }
+}
+
+@media (min-width: 760px) {
+  .about-dialects { grid-template-columns: repeat(3, 1fr); }
+  .about-dialect { font-size: var(--text-lg); }
+}
