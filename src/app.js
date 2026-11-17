@@ -48,7 +48,7 @@ const TABS = [
   { route: ROUTE.progress, href: "#/progress", key: "shell.progress" },
 ];
 
-const LANG_KEYS = { en: "shell.langEn", hi: "shell.langHi" };
+export const LANG_KEYS = { en: "shell.langEn", hi: "shell.langHi" };
 
 function route(name, params = {}) {
   return { name, params };
@@ -78,7 +78,7 @@ export function routeFor(hash, settings) {
   return settings.dialect ? parseRoute(hash) : route(ROUTE.welcome);
 }
 
-function make(doc, tag, className = "", attributes = {}) {
+export function make(doc, tag, className = "", attributes = {}) {
   const el = doc.createElement(tag);
   el.className = className;
   for (const [name, value] of Object.entries(attributes)) el.setAttribute(name, value);
@@ -135,6 +135,7 @@ export function mountShell(doc, root, { onLanguageChange }) {
   markLang(getSettings().lang);
   return {
     view,
+    switchLang: switchTo,
     markTab: (name) => tabs.forEach((tab, i) => tab.setAttribute("aria-current", TABS[i].route === name ? "page" : "false")),
   };
 }
@@ -227,7 +228,9 @@ function makeRouter(doc, shell, getWords) {
       if (visit !== visits) return;
       if (!render) return renderComingSoon(doc, shell.view);
       shell.view.replaceChildren();
-      const result = await render(shell.view, { words: getWords(), settings, t, go, params: current.params });
+      const result = await render(shell.view, {
+        words: getWords(), settings, t, go, params: current.params, switchLang: shell.switchLang,
+      });
       if (typeof result === "function") cleanup = result;
     } catch (error) {
       console.error(`the ${current.name} screen failed:`, error);

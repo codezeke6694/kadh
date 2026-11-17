@@ -3,5 +3,11 @@
   "prototype": false,
   "book_auto_push": true,
   "knowledge": "~/one-engine-knowledge/kadh",
-  "full_check": "node --test"
+  "full_check": "node --test",
+  "journey_signin": {
+    "learner": {
+      "storage_state": ".walk/learner.json",
+      "setup": "node scripts/journey-learner.mjs"
+    }
+  }
 }
