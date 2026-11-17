@@ -14,4 +14,4 @@ The flows every screen is walked and judged against before a task closes.
 | J08 | learner | play word builder | /#/play/word-builder | tap the first syllable | the syllable moves into the answer row |
 | J09 | learner | play true or false rush | /#/play/true-false | tap "True" | the answer is marked and the next pair appears with the timer running |
 | J10 | learner | switch to Hindi buttons and another Kinnauri | /#/settings | tap "हिंदी"; choose "Hamskad" | the buttons read in Hindi and the games use Hamskad words |
-| J11 | learner | see their progress | / | open "My progress" | it shows words learned, the day streak and best scores per game |
+| J11 | learner | see their progress | / | open "Progress" | it shows words learned, the day streak and best scores per game |
