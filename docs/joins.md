@@ -97,7 +97,7 @@ export default {
 ## J4 Screens and words on screen (src/app.js, src/i18n.js)
 
 Routes (hash, so GitHub Pages needs nothing):
-`#/` home, `#/welcome` first visit, `#/words` list, `#/word/<id>`, `#/play/<gameId>`, `#/progress`, `#/settings`, `#/about`.
+`#/` home, `#/welcome` first visit, `#/words` list, `#/word/<id>`, `#/play/<gameId>` and `#/play/<gameId>/<topicId>` (ctx.params.gameId, ctx.params.topic; the kit skips its topic picker when a topic is given; no `?query` in routes), `#/progress`, `#/settings`, `#/about`.
 
 - `t(key)` returns the text in the chosen language; every on-screen word goes through it.
   Each part adds its own keys in its own file `src/i18n/<part>.js` exporting `{ en: {...}, hi: {...} }`,
