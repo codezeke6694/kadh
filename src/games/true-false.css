@@ -1,0 +1,186 @@
+/* True or false rush: a burning fuse of 60 seconds, one big card, two big answers. */
+
+.tf {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 38rem;
+  margin: var(--space-4) auto 0;
+}
+
+.tf-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.tf-timer,
+.tf-score-line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.tf-seconds {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--deodar);
+}
+
+.tf-seconds-label,
+.tf-score-label {
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.tf-score {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--apple);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The fuse: burns from full to nothing over the round, deodar turning to apple. */
+.tf-drain {
+  height: 0.6rem;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--apple), var(--deodar));
+  transform-origin: left center;
+  animation: tf-burn 60s linear forwards;
+}
+
+@keyframes tf-burn {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+.tf-stage {
+  min-height: 15rem;
+  display: grid;
+}
+
+.tf-card {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-4);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.tf-word {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-kinnauri);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--deodar);
+  overflow-wrap: anywhere;
+}
+
+.tf-means {
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+.tf-meaning {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.tf-flash-right { animation: tf-right 0.45s ease-out; }
+.tf-flash-wrong { animation: tf-wrong 0.45s ease-out; }
+
+@keyframes tf-right {
+  0% { background: var(--right-soft); border-color: var(--right); transform: scale(1.04); }
+  100% { background: var(--surface); border-color: var(--line); transform: scale(1); }
+}
+
+@keyframes tf-wrong {
+  0% { background: var(--wrong-soft); border-color: var(--wrong); transform: translateX(-6px); }
+  30% { transform: translateX(6px); }
+  60% { transform: translateX(-3px); }
+  100% { background: var(--surface); border-color: var(--line); transform: translateX(0); }
+}
+
+.tf-feedback {
+  min-height: 1.6em;
+  margin: 0;
+  text-align: center;
+  font-weight: 600;
+}
+
+.tf-feedback-right { color: var(--right); }
+.tf-feedback-wrong { color: var(--wrong); }
+
+.tf-answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.tf-answer {
+  min-height: 5rem;
+  border: 0;
+  border-radius: var(--radius-button);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  touch-action: manipulation;
+}
+
+.tf-answer:active { transform: translateY(2px); }
+
+.tf-answer:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.tf-false {
+  background: var(--apple);
+  color: var(--on-apple);
+}
+
+.tf-true {
+  background: var(--deodar);
+  color: var(--on-deodar);
+}
+
+.tf-keys {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-sm);
+}
+
+/* Phones have no arrow keys to speak of. */
+@media (hover: none) {
+  .tf-keys { display: none; }
+}
+
+@media (min-width: 48rem) {
+  .tf-stage { min-height: 18rem; }
+  .tf-word { font-size: 3.2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tf-drain { animation: none; }
+  .tf-flash-right { animation: none; border-color: var(--right); }
+  .tf-flash-wrong { animation: none; border-color: var(--wrong); }
+  .tf-answer:active { transform: none; }
+}
