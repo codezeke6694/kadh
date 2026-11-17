@@ -1,0 +1,113 @@
+/* Flashcards: one big card, the Kinnauri word on the front and its meaning on the back. */
+
+.fc {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 32rem;
+  margin: var(--space-4) auto 0;
+}
+
+.fc-tally {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.fc-known { color: var(--right); font-weight: 700; }
+
+/* Each draw is a fresh card, so a short turn on arrival reads as the flip. */
+.fc-card {
+  display: grid;
+  min-height: 17rem;
+  padding: var(--space-6) var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  animation: fc-turn 260ms ease-out;
+}
+
+.fc-card:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+
+.fc-card.fc-flipped {
+  border-color: var(--deodar-deep);
+  background: var(--deodar);
+  color: var(--on-deodar);
+}
+
+.fc-face {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--space-3);
+}
+
+.fc-back,
+.fc-flipped .fc-front { display: none; }
+
+.fc-flipped .fc-back { display: grid; }
+
+.fc-kinnauri {
+  font: 700 clamp(var(--text-kinnauri), 13vw, 4.5rem) / 1.25 var(--font-display);
+  overflow-wrap: anywhere;
+}
+
+.fc-hint { font-size: var(--text-sm); color: var(--ink-soft); }
+
+.fc-meaning {
+  font: 700 var(--text-2xl) / 1.25 var(--font-display);
+  overflow-wrap: anywhere;
+}
+
+.fc-small { font-size: var(--text-lg); opacity: 0.8; }
+
+.fc-status {
+  min-height: 1.6em;
+  margin: 0;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.fc-status.fc-cheer {
+  color: var(--right);
+  font-weight: 700;
+  animation: fc-pop 420ms ease-out;
+}
+
+.fc-answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.fc-answers .button {
+  min-height: 3.5rem;
+  font-size: var(--text-base);
+}
+
+/* Snow on the green reads in both themes: dark green on light, light green on dark. */
+.fc-answers .fc-knew { background: var(--right); color: var(--snow); }
+
+.fc-answers .fc-knew:hover { background: var(--right); filter: brightness(0.92); }
+
+@keyframes fc-turn {
+  from { transform: perspective(60rem) rotateY(80deg); opacity: 0.4; }
+  to { transform: none; opacity: 1; }
+}
+
+@keyframes fc-pop {
+  0% { transform: scale(0.8); }
+  60% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-card,
+  .fc-status.fc-cheer { animation: none; }
+}
