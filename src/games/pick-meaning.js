@@ -7,6 +7,9 @@ export const REVERSE_EVERY = 3;
 const WRONG_COUNT = CHOICE_COUNT - 1;
 // Skipped words (too few different choices) get retries; this bounds them.
 const TRIES_PER_QUESTION = 5;
+// The next question comes by itself; a miss waits longer so the right answer can be read.
+export const NEXT_AFTER_RIGHT_MS = 1100;
+export const NEXT_AFTER_WRONG_MS = 2600;
 const CHEER_KEYS = ["pick.cheer1", "pick.cheer2", "pick.cheer3"];
 
 export function meaningOf(word, lang) {
@@ -97,6 +100,7 @@ function makeButton(doc, className, text, onClick) {
 function mount(el, { words, dialect, lang, t, onAnswer, onFinish }) {
   const doc = el.ownerDocument;
   const root = make(doc, "section", "pick-meaning");
+  root.setAttribute("tabindex", "-1");
   el.replaceChildren(root);
   const game = { doc, root, t, onAnswer, onFinish, questions: makeRound(words, { dialect, lang }), index: 0, score: 0, results: [] };
   if (!game.questions.length) {
@@ -105,7 +109,10 @@ function mount(el, { words, dialect, lang, t, onAnswer, onFinish }) {
   }
   root.addEventListener("keydown", (event) => pickByKey(game, event));
   showQuestion(game);
-  return () => root.remove();
+  return () => {
+    clearTimeout(game.timer);
+    root.remove();
+  };
 }
 
 function pickByKey(game, event) {
@@ -147,7 +154,8 @@ function showQuestion(game) {
   game.feedback = make(doc, "div", "pm-feedback");
   game.feedback.setAttribute("aria-live", "polite");
   root.replaceChildren(makeTrail(game), card, grid, game.feedback);
-  game.buttons[0].focus?.({ preventScroll: true });
+  // Focus on the game itself (no ring) keeps the number keys working from one question to the next.
+  root.focus?.({ preventScroll: true });
 }
 
 function choose(game, picked) {
@@ -179,10 +187,11 @@ function showFeedback(game, correct, rightText) {
     : make(doc, "p", "pm-miss", `${t("pick.wrong")} ${rightText}`);
   const next = makeButton(doc, "button pm-next", t(last ? "pick.finish" : "pick.next"), () => goNext(game));
   game.feedback.replaceChildren(message, next);
-  next.focus?.({ preventScroll: true });
+  game.timer = setTimeout(() => goNext(game), correct ? NEXT_AFTER_RIGHT_MS : NEXT_AFTER_WRONG_MS);
 }
 
 function goNext(game) {
+  clearTimeout(game.timer);
   if (game.index === game.questions.length - 1) {
     game.onFinish({ score: game.score, total: game.questions.length });
     return;

@@ -6,7 +6,9 @@
   margin-top: var(--space-4);
 }
 
-/* One step per question: grey ahead, apple for now, green or red once answered. */
+.pick-meaning:focus { outline: none; }
+
+/* One step per question: grey ahead, deodar for now, green or red once answered. */
 .pm-trail {
   display: grid;
   grid-auto-flow: column;
@@ -23,9 +25,9 @@
   background: var(--line);
 }
 
-.pm-dot-now { background: var(--apple); }
+.pm-dot-now { background: var(--deodar); }
 .pm-dot-right { background: var(--right); }
-.pm-dot-wrong { background: var(--wrong); opacity: 0.55; }
+.pm-dot-wrong { background: var(--wrong); }
 
 .pm-card {
   text-align: center;
@@ -93,8 +95,29 @@
 
 .pm-choice[aria-disabled="true"] { cursor: default; }
 .pm-choice.pm-faded { opacity: 0.45; }
-.pm-choice.right { animation: pm-pop 360ms ease-out; }
-.pm-choice.wrong { animation: pm-shake 320ms ease-in-out; }
+.pm-choice.right {
+  background: var(--right-soft);
+  border-color: var(--right);
+  animation: pm-pop 360ms ease-out;
+}
+
+.pm-choice.wrong {
+  background: var(--wrong-soft);
+  border-color: var(--wrong);
+  animation: pm-shake 320ms ease-in-out;
+}
+
+/* A mark as well as the colour, so right and wrong read without colour too. */
+.pm-choice.right::after,
+.pm-choice.wrong::after {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-2);
+  font-weight: 800;
+}
+
+.pm-choice.right::after { content: "✓"; color: var(--right); }
+.pm-choice.wrong::after { content: "✗"; color: var(--wrong); }
 
 .pm-feedback {
   display: flex;

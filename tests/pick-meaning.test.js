@@ -1,6 +1,6 @@
-import { test, beforeEach } from "node:test";
+import { test, beforeEach, afterEach, mock } from "node:test";
 import assert from "node:assert/strict";
-import game, { makeRound, meaningOf, ROUND_LENGTH, CHOICE_COUNT, REVERSE_EVERY } from "../src/games/pick-meaning.js";
+import game, { makeRound, meaningOf, ROUND_LENGTH, CHOICE_COUNT, REVERSE_EVERY, NEXT_AFTER_RIGHT_MS, NEXT_AFTER_WRONG_MS } from "../src/games/pick-meaning.js";
 import { checkGame } from "../src/games/index.js";
 import { t, setLang, loadStrings } from "../src/i18n.js";
 import { makeFakeDocument, findByClass, allElements } from "./fake-dom.js";
@@ -25,9 +25,12 @@ function seeded(seed = 7) {
 const round = (words, options = {}) => makeRound(words, { dialect: "pahari", lang: "en", rng: seeded(options.seed), ...options });
 
 beforeEach(async () => {
+  mock.timers.enable({ apis: ["setTimeout"] });
   setLang("en");
   await loadStrings();
 });
+
+afterEach(() => mock.timers.reset());
 
 test("the game keeps the J3 contract", () => {
   assert.doesNotThrow(() => checkGame(game, "pick-meaning"));
@@ -190,5 +193,59 @@ test("too few usable words says so instead of a broken question", () => {
   const { el, finishes } = play(same);
   assert.equal(choiceButtons(el).length, 0);
   assert.match(el.textContent, /different/);
+  assert.deepEqual(finishes, []);
+});
+
+const promptText = (el) => findByClass(el, "pm-prompt")[0].textContent;
+const trailStep = (el) => findByClass(el, "pm-dot").findIndex((dot) => dot.className.includes("pm-dot-now"));
+
+test("after a right pick the next question comes by itself", () => {
+  const { el, answers } = play(WORDS);
+  choiceButtons(el)[rightIndex(el)].click();
+  mock.timers.tick(NEXT_AFTER_RIGHT_MS - 1);
+  assert.equal(trailStep(el), 0);
+  mock.timers.tick(1);
+  assert.equal(trailStep(el), 1);
+  assert.equal(choiceButtons(el).length, CHOICE_COUNT);
+  assert.equal(answers.length, 1);
+});
+
+test("after a wrong pick the right answer stays longer before the next question", () => {
+  const { el } = play(WORDS);
+  const first = promptText(el);
+  choiceButtons(el)[(rightIndex(el) + 1) % CHOICE_COUNT].click();
+  mock.timers.tick(NEXT_AFTER_RIGHT_MS);
+  assert.equal(promptText(el), first);
+  mock.timers.tick(NEXT_AFTER_WRONG_MS - NEXT_AFTER_RIGHT_MS);
+  assert.equal(trailStep(el), 1);
+});
+
+test("Next skips the wait and no second question is skipped by the timer", () => {
+  const { el } = play(WORDS);
+  choiceButtons(el)[rightIndex(el)].click();
+  nextButton(el).click();
+  mock.timers.tick(NEXT_AFTER_WRONG_MS);
+  assert.equal(trailStep(el), 1);
+});
+
+test("the round finishes by itself after the last answer, once", () => {
+  const { el, finishes } = play(WORDS);
+  for (let i = 0; i < ROUND_LENGTH; i += 1) {
+    choiceButtons(el)[rightIndex(el)].click();
+    mock.timers.tick(NEXT_AFTER_RIGHT_MS);
+  }
+  mock.timers.tick(NEXT_AFTER_WRONG_MS);
+  assert.deepEqual(finishes, [{ score: ROUND_LENGTH, total: ROUND_LENGTH }]);
+});
+
+test("unmounting stops the timer: a game left on its last answer never finishes later", () => {
+  const { el, unmount, finishes } = play(WORDS);
+  for (let i = 0; i < ROUND_LENGTH - 1; i += 1) {
+    choiceButtons(el)[rightIndex(el)].click();
+    nextButton(el).click();
+  }
+  choiceButtons(el)[rightIndex(el)].click();
+  unmount();
+  mock.timers.tick(NEXT_AFTER_WRONG_MS);
   assert.deepEqual(finishes, []);
 });
