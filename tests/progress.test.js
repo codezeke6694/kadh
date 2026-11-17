@@ -168,8 +168,20 @@ test("saved progress of the wrong shape is replaced part by part", async () => {
 test("a word id such as __proto__ is kept as an ordinary word", async () => {
   const progress = await loadProgress();
   progress.recordAnswer("__proto__", true, DAY_ONE);
+  progress.recordAnswer("__proto__", true, DAY_ONE);
   assert.equal({}.box, undefined);
-  assert.deepEqual(progress.dueWords([{ id: "constructor" }], DAY_FOUR, 5), []);
+  assert.deepEqual(wordState(storage, "__proto__"), { right: 2, wrong: 0, box: 3, due: "2026-11-21" });
+  const afterReload = await loadProgress();
+  afterReload.recordAnswer("__proto__", false, DAY_ONE);
+  assert.equal(wordState(storage, "__proto__").box, 1);
+  assert.equal(wordState(storage, "__proto__").right, 2);
+  assert.deepEqual(afterReload.dueWords([{ id: "__proto__" }, { id: "constructor" }], DAY_ONE, 5).map((w) => w.id), ["__proto__"]);
+});
+
+test("a game id such as __proto__ keeps its best score", async () => {
+  const progress = await loadProgress();
+  progress.recordGame("__proto__", 6, DAY_ONE);
+  assert.equal(progress.getStats(DAY_ONE).best.__proto__, 6);
 });
 
 test("due words come back earliest first, only once due, at most n", async () => {

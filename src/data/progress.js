@@ -15,8 +15,14 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 // When storage is blocked, the progress lives here for as long as the page is open.
 let memoryState = null;
 
+// Word and game ids are keys of maps with no prototype, so an id such as "__proto__"
+// is stored as an ordinary key and never reaches Object.prototype.
+function toIdMap(entries = {}) {
+  return Object.assign(Object.create(null), entries);
+}
+
 function emptyState() {
-  return { dialect: null, lang: DEFAULT_LANG, words: {}, streak: { days: 0, last: null }, best: {} };
+  return { dialect: null, lang: DEFAULT_LANG, words: toIdMap(), streak: { days: 0, last: null }, best: toIdMap() };
 }
 
 function readStoredText() {
@@ -40,9 +46,9 @@ function parseState(text) {
     const state = emptyState();
     if (DIALECTS.includes(saved.dialect)) state.dialect = saved.dialect;
     if (LANGS.includes(saved.lang)) state.lang = saved.lang;
-    if (isRecord(saved.words)) state.words = saved.words;
+    if (isRecord(saved.words)) state.words = toIdMap(saved.words);
     if (isRecord(saved.streak)) state.streak = saved.streak;
-    if (isRecord(saved.best)) state.best = saved.best;
+    if (isRecord(saved.best)) state.best = toIdMap(saved.best);
     return state;
   } catch (error) {
     if (!(error instanceof SyntaxError)) throw error;
@@ -81,11 +87,6 @@ function checkChoice(value, allowed, name) {
   }
 }
 
-// Own keys only, so an id such as "__proto__" never reaches Object.prototype.
-function wordProgress(progress, wordId) {
-  return Object.hasOwn(progress, wordId) ? progress[wordId] : undefined;
-}
-
 function updateStreak(streak, today) {
   if (streak.last === today) return streak;
   const days = streak.last === addDays(today, -1) ? streak.days + 1 : 1;
@@ -109,7 +110,7 @@ export function setSettings({ dialect, lang } = {}) {
 export function recordAnswer(wordId, correct, today) {
   checkDate(today);
   const state = loadState();
-  const word = wordProgress(state.words, wordId) || { right: 0, wrong: 0, box: FIRST_BOX, due: today };
+  const word = state.words[wordId] || { right: 0, wrong: 0, box: FIRST_BOX, due: today };
   if (correct) {
     word.right += 1;
     word.box = Math.min(word.box + 1, LAST_BOX);
@@ -144,7 +145,7 @@ export function dueWords(words, today, n) {
   checkDate(today);
   const progress = loadState().words;
   return words
-    .filter((word) => wordProgress(progress, word.id)?.due <= today)
+    .filter((word) => progress[word.id]?.due <= today)
     .sort((a, b) => progress[a.id].due.localeCompare(progress[b.id].due))
     .slice(0, n);
 }
