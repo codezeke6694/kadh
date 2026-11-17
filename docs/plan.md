@@ -75,8 +75,8 @@ Type: story
   accept: every topic has a Hindi name
   accept: every topic has an icon
   accept: every topic holds at least 8 words
-- T4 App shell and the look | 1d | type: story | points: 3 | needs: T1, T2 | files: index.html, package.json, styles/base.css, src/app.js, src/i18n.js, src/i18n/shell.js, tests/shell.test.js | rests on: J4, D4, D9 | check: `node --test`
-  Load the frontend-design skill first: this sets the look every other screen uses. Add playwright-core to package.json as a dev dependency only (D11), once the owner has allowed it. The router of J4, `t()`, a header with the app name and a language switch, a bottom bar (Home, Words, Play, Progress) on phones. index.html links styles/base.css and every per-part stylesheet named in docs/joins.md J4 (a missing one is harmless). A first visit with no chosen Kinnauri goes to #/welcome.
+- T4 App shell and the look | 1d | type: story | points: 3 | needs: T1, T2 | files: index.html, styles/base.css, src/app.js, src/i18n.js, src/i18n/shell.js, tests/shell.test.js | rests on: J4, D4, D9 | check: `node --test`
+  Load the frontend-design skill first: this sets the look every other screen uses. The router of J4, `t()`, a header with the app name and a language switch, a bottom bar (Home, Words, Play, Progress) on phones. index.html links styles/base.css and every per-part stylesheet named in docs/joins.md J4 (a missing one is harmless). A first visit with no chosen Kinnauri goes to #/welcome.
   accept: the header's language switch changes the buttons between English and Hindi
   accept: a first visit with no Kinnauri chosen opens the welcome route
   accept: an unknown route shows a friendly "not found" with a way home
