@@ -52,7 +52,7 @@ Type: story
 
 ## Tasks
 - T1 Words: read and parse the dictionary | 1d | type: task | points: 3 | files: src/config.js, src/data/words.js, src/data/load.js, scripts/snapshot.mjs, data/sheet.csv, tests/data.test.js, package.json | rests on: J1, D2, D12 | check: `node --test tests/data.test.js`
-  docs/joins.md J1. package.json has `"type": "module"`, `"test": "node --test"` and playwright-core as a dev dependency only (D11).
+  docs/joins.md J1. package.json has `"type": "module"` and `"test": "node --test"`; no packages.
   accept: the words load from the copy in data/sheet.csv when the live sheet cannot be reached
   accept: the words load from the live Google Sheet when it answers
   accept: a cell "मुहवा / टिन" gives the two forms मुहवा and टिन
@@ -75,8 +75,8 @@ Type: story
   accept: every topic has a Hindi name
   accept: every topic has an icon
   accept: every topic holds at least 8 words
-- T4 App shell and the look | 1d | type: story | points: 3 | needs: T1, T2 | files: index.html, styles/base.css, src/app.js, src/i18n.js, src/i18n/shell.js, tests/shell.test.js | rests on: J4, D4, D9 | check: `node --test`
-  Load the frontend-design skill first: this sets the look every other screen uses. The router of J4, `t()`, a header with the app name and a language switch, a bottom bar (Home, Words, Play, Progress) on phones. index.html links styles/base.css and every per-part stylesheet named in docs/joins.md J4 (a missing one is harmless). A first visit with no chosen Kinnauri goes to #/welcome.
+- T4 App shell and the look | 1d | type: story | points: 3 | needs: T1, T2 | files: index.html, package.json, styles/base.css, src/app.js, src/i18n.js, src/i18n/shell.js, tests/shell.test.js | rests on: J4, D4, D9 | check: `node --test`
+  Load the frontend-design skill first: this sets the look every other screen uses. Add playwright-core to package.json as a dev dependency only (D11), once the owner has allowed it. The router of J4, `t()`, a header with the app name and a language switch, a bottom bar (Home, Words, Play, Progress) on phones. index.html links styles/base.css and every per-part stylesheet named in docs/joins.md J4 (a missing one is harmless). A first visit with no chosen Kinnauri goes to #/welcome.
   accept: the header's language switch changes the buttons between English and Hindi
   accept: a first visit with no Kinnauri chosen opens the welcome route
   accept: an unknown route shows a friendly "not found" with a way home
