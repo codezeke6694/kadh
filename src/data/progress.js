@@ -107,6 +107,12 @@ export function setSettings({ dialect, lang } = {}) {
   saveState(state);
 }
 
+// Clears what was learned (words, streak, best scores); the chosen Kinnauri and language stay.
+export function resetProgress() {
+  const { dialect, lang } = loadState();
+  saveState({ ...emptyState(), dialect, lang });
+}
+
 export function recordAnswer(wordId, correct, today) {
   checkDate(today);
   const state = loadState();
