@@ -99,12 +99,21 @@ function make(doc, tag, className = "", text = "") {
   return el;
 }
 
+// A card holding a word longer than this many letters gets smaller type, so the word stays whole
+// on a phone ("Grandparents" was split "Grandparent / s").
+export const LONG_WORD = 9;
+
+export function isLongText(text) {
+  return String(text).split(/\s+/).some((part) => [...part].length > LONG_WORD);
+}
+
 function makeCard(doc, card, index, onTurn) {
   const button = make(doc, "button", "memory-card");
   button.setAttribute("type", "button");
   button.setAttribute("data-pair", card.pairId);
   const back = make(doc, "span", "memory-back");
-  const face = make(doc, "span", `memory-face memory-${card.side}`, card.text);
+  const long = isLongText(card.text) ? " memory-long" : "";
+  const face = make(doc, "span", `memory-face memory-${card.side}${long}`, card.text);
   if (card.side === SIDE.WORD) face.setAttribute("lang", "hi");
   back.setAttribute("aria-hidden", "true");
   face.setAttribute("aria-hidden", "true");

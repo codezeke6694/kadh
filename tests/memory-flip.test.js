@@ -1,6 +1,6 @@
 import { test, beforeEach, afterEach, mock } from "node:test";
 import assert from "node:assert/strict";
-import game, { makeDeck, MemoryBoard, scoreForMoves, PAIRS, FLIP_BACK_MS, TURN } from "../src/games/memory-flip.js";
+import game, { makeDeck, MemoryBoard, scoreForMoves, PAIRS, FLIP_BACK_MS, TURN, isLongText, LONG_WORD } from "../src/games/memory-flip.js";
 import { checkGame } from "../src/games/index.js";
 import { t, setLang, loadStrings } from "../src/i18n.js";
 import { makeFakeDocument, findByClass, findButton } from "./fake-dom.js";
@@ -96,6 +96,13 @@ test("the board is done when every pair is found", () => {
   }
   assert.ok(board.done);
   assert.equal(board.moves, PAIRS);
+});
+
+test("a card with a word longer than LONG_WORD letters is marked long, so its type shrinks instead of the word splitting", () => {
+  assert.equal(isLongText("Grandparents"), true);
+  assert.equal(isLongText("Sock or stocking"), false);
+  assert.equal(isLongText("x".repeat(LONG_WORD)), false);
+  assert.equal(isLongText("x".repeat(LONG_WORD + 1)), true);
 });
 
 test("score: a perfect game scores every pair; each two extra moves cost a point, never below zero", () => {

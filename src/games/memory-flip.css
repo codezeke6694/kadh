@@ -75,7 +75,8 @@
   background: var(--surface);
   transform: rotateY(180deg);
   text-align: center;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .memory-word {
@@ -88,6 +89,10 @@
   font: 500 clamp(1rem, 3.6vw, 1.25rem) / 1.3 var(--font-body);
   color: var(--ink-soft);
 }
+
+/* A long word gets smaller type so it fits on one line instead of breaking mid-word. */
+.memory-face.memory-long.memory-meaning { font-size: clamp(0.8rem, 3.1vw, 1.05rem); }
+.memory-face.memory-long.memory-word { font-size: clamp(1.05rem, 4.2vw, 1.6rem); }
 
 .memory-card.is-up .memory-back { transform: rotateY(-180deg); }
 .memory-card.is-up .memory-face { transform: rotateY(0); }
