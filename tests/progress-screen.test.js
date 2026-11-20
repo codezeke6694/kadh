@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import render, { GAME_IDS, bestScoreRows, localDay } from "../src/screens/progress.js";
 import { t, setLang, loadStrings } from "../src/i18n.js";
 import { recordAnswer, recordGame, setSettings } from "../src/data/progress.js";
+import { loadGame } from "../src/games/index.js";
 
 // A small stand-in for the browser's document: only what the screen uses.
 class FakeElement {
@@ -141,6 +142,15 @@ test("every word on the screen has English and Hindi", async () => {
   const { default: strings } = await import("../src/i18n/progress.js");
   assert.deepEqual(Object.keys(strings.hi).sort(), Object.keys(strings.en).sort());
   for (const id of GAME_IDS) assert.ok(strings.en[`progress.game.${id}`] && strings.hi[`progress.game.${id}`], id);
+});
+
+test("each game's best score is named as the game names itself, in both languages", async () => {
+  const { default: strings } = await import("../src/i18n/progress.js");
+  for (const id of GAME_IDS) {
+    const { title } = await loadGame(id);
+    assert.equal(strings.en[`progress.game.${id}`], title.en, id);
+    assert.equal(strings.hi[`progress.game.${id}`], title.hi, id);
+  }
 });
 
 test("the screen speaks Hindi when chosen", () => {

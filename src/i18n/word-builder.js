@@ -11,7 +11,9 @@ export default {
     "wordBuilder.showMe": "Show me",
     "wordBuilder.next": "Next word",
     "wordBuilder.seeScore": "See my score",
-    "wordBuilder.noWords": "These words have no words long enough to build. Choose other words above.",
+    "wordBuilder.place": "Place",
+    "wordBuilder.takeBack": "Take back",
+    "wordBuilder.noWords": "None of these words is long enough to build. Choose other words above.",
   },
   hi: {
     "wordBuilder.ask": "इसके लिए किन्नौरी शब्द बनाएँ:",
@@ -24,6 +26,8 @@ export default {
     "wordBuilder.showMe": "दिखाओ",
     "wordBuilder.next": "अगला शब्द",
     "wordBuilder.seeScore": "मेरा स्कोर देखें",
-    "wordBuilder.noWords": "इन शब्दों में बनाने लायक लंबा कोई शब्द नहीं है। ऊपर से दूसरे शब्द चुनें।",
+    "wordBuilder.place": "रखें",
+    "wordBuilder.takeBack": "वापस लें",
+    "wordBuilder.noWords": "इनमें से कोई भी शब्द बनाने लायक लंबा नहीं है। ऊपर से दूसरे शब्द चुनें।",
   },
 };

@@ -135,7 +135,9 @@ test("too few words in this Kinnauri says so and offers the way home", async () 
   const { el } = await open(makeFakeGame("flashcards", 50));
   assert.equal(topicButtons(el).length, 0);
   assert.match(el.textContent, /Not enough words/);
-  assert.equal(findButton(el, "Back home").getAttribute("href"), "#/");
+  const home = findButton(el, "Back home");
+  assert.equal(home.getAttribute("href"), "#/");
+  assert.equal(home.className, "button", "a lone way home is the main button, as on the shell's cards");
 });
 
 test("a route naming a topic skips the picker and plays that topic", async () => {
@@ -277,7 +279,9 @@ test("a game's own stylesheet is linked once", async () => {
 test("a game not built yet shows coming soon with a way home", async () => {
   const { el } = await open(null, { gameId: "flashcards" });
   assert.match(el.textContent, /still being built/);
-  assert.equal(findButton(el, "Back home").getAttribute("href"), "#/");
+  const home = findButton(el, "Back home");
+  assert.equal(home.getAttribute("href"), "#/");
+  assert.equal(home.className, "button", "the same button as the shell's own still-being-built card");
 });
 
 test("an unknown game shows not found", async () => {

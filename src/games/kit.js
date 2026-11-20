@@ -57,8 +57,9 @@ function makeButton(doc, className, text, onClick) {
   return button;
 }
 
-function makeHomeLink(doc, t) {
-  const link = make(doc, "a", "button secondary", t("kit.backHome"));
+// The way home is the main button when it is a card's only action, as on the shell's own cards.
+function makeHomeLink(doc, t, className = "button secondary") {
+  const link = make(doc, "a", className, t("kit.backHome"));
   link.setAttribute("href", HOME_HASH);
   return link;
 }
@@ -70,7 +71,7 @@ function inLang(text, lang) {
 
 function renderComingSoon(doc, el, t) {
   const card = make(doc, "section", "notice card");
-  card.append(make(doc, "h1", "", t("kit.comingSoonTitle")), make(doc, "p", "", t("kit.comingSoonText")), makeHomeLink(doc, t));
+  card.append(make(doc, "h1", "", t("kit.comingSoonTitle")), make(doc, "p", "", t("kit.comingSoonText")), makeHomeLink(doc, t, "button"));
   el.replaceChildren(card);
 }
 
@@ -104,7 +105,7 @@ function showPicker(session) {
   page.append(makeGameHeading(session), make(doc, "p", "kit-blurb muted", inLang(game.blurb, ctx.settings.lang)));
   if (!choices.length) {
     const empty = make(doc, "div", "kit-empty card");
-    empty.append(make(doc, "h2", "", ctx.t("kit.notEnoughTitle")), make(doc, "p", "", ctx.t("kit.notEnoughText")), makeHomeLink(doc, ctx.t));
+    empty.append(make(doc, "h2", "", ctx.t("kit.notEnoughTitle")), make(doc, "p", "", ctx.t("kit.notEnoughText")), makeHomeLink(doc, ctx.t, "button"));
     page.append(empty);
   } else {
     const list = make(doc, "div", "kit-topics");
